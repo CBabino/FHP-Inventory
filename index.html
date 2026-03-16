@@ -8,273 +8,250 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --green: #1a7a4a;
-  --green-light: #e6f4ec;
-  --green-mid: #2d9e63;
-  --red: #c0392b;
-  --red-light: #fdecea;
-  --amber: #d97706;
-  --amber-light: #fef3c7;
-  --bg: #f5f7f5;
-  --surface: #ffffff;
-  --surface2: #f0f2f0;
-  --border: #dde3dd;
-  --text: #1a1f1a;
-  --text2: #4a544a;
-  --text3: #8a948a;
-  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
-  --radius: 12px;
-  --radius-sm: 8px;
+  --green:#1a7a4a; --green-light:#e6f4ec; --green-mid:#2d9e63;
+  --red:#c0392b; --red-light:#fdecea;
+  --amber:#d97706; --amber-light:#fef3c7;
+  --bg:#f5f7f5; --surface:#fff; --surface2:#f0f2f0;
+  --border:#dde3dd; --text:#1a1f1a; --text2:#4a544a; --text3:#8a948a;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --radius:12px; --radius-sm:8px;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+[data-theme="dark"] {
+  --bg:#0f1410; --surface:#1a1f1a; --surface2:#242924;
+  --border:#2e362e; --text:#e8ede8; --text2:#9aaa9a; --text3:#5a6a5a;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.4);
+  --green-light:#0d2e1c; --red-light:#2e0f0f; --amber-light:#2e1f00;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .2s,color .2s;}
 
 /* TOPBAR */
-.topbar {
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  padding:0 1.5rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  height:64px;
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-.topbar-left { display:flex; align-items:center; gap:1rem; }
-.logo-wrap { width:40px; height:40px; border-radius:10px; overflow:hidden; display:flex; align-items:center; justify-content:center; background:var(--green); flex-shrink:0; }
-.logo-wrap img { width:100%; height:100%; object-fit:cover; }
-.logo-wrap .logo-icon { color:#fff; font-size:1.25rem; }
-.app-name { font-size:1.125rem; font-weight:600; color:var(--text); }
-.topbar-right { display:flex; align-items:center; gap:.75rem; }
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 .875rem;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:.6rem;min-width:0;}
+.logo-wrap{width:34px;height:34px;border-radius:9px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--green);flex-shrink:0;cursor:default;}
+.logo-wrap img{width:100%;height:100%;object-fit:cover;}
+.logo-wrap .logo-icon{color:#fff;font-size:1rem;}
+.app-name{font-size:.95rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-right{display:flex;align-items:center;gap:.4rem;flex-shrink:0;}
 
-.badge-live { display:inline-flex; align-items:center; gap:.35rem; font-size:.7rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:.2rem .6rem; border-radius:99px; }
-.badge-live.online { background:var(--green-light); color:var(--green); }
-.badge-live.offline { background:var(--red-light); color:var(--red); }
-.badge-live.connecting { background:var(--amber-light); color:var(--amber); }
-.badge-live .dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
-.badge-live.connecting .dot { animation:blink 1s infinite; }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+.badge-live{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .5rem;border-radius:99px;white-space:nowrap;}
+.badge-live.online{background:var(--green-light);color:var(--green);}
+.badge-live.offline{background:var(--red-light);color:var(--red);}
+.badge-live.connecting{background:var(--amber-light);color:var(--amber);}
+.badge-live .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.badge-live.connecting .dot{animation:blink 1s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-.btn-admin-login { background:var(--surface2); border:1px solid var(--border); color:var(--text2); font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:500; padding:.4rem .9rem; border-radius:8px; cursor:pointer; transition:all .15s; }
-.btn-admin-login:hover { background:var(--border); }
-.btn-admin-login.active { background:var(--green); color:#fff; border-color:var(--green); }
-
-/* MAIN */
-.main { max-width:1280px; margin:0 auto; padding:1.5rem; }
-
-/* STATS */
-.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:1.5rem; }
-.stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.25rem; }
-.stat-val { font-size:2rem; font-weight:600; font-family:'DM Mono',monospace; line-height:1; margin-bottom:.25rem; }
-.stat-val.blue { color:#1d6fa4; }
-.stat-val.green { color:var(--green); }
-.stat-val.red { color:var(--red); }
-.stat-label { font-size:.8rem; color:var(--text3); font-weight:500; text-transform:uppercase; letter-spacing:.05em; }
-
-/* ALERT */
-.low-alert { background:var(--red-light); border:1px solid #f5c6c3; border-radius:var(--radius); padding:1rem 1.25rem; margin-bottom:1.5rem; }
-.low-alert-title { font-weight:600; color:var(--red); font-size:.9rem; margin-bottom:.5rem; }
-.low-alert-item { font-size:.85rem; color:#7a2020; padding:.1rem 0; }
-
-/* TOOLBAR */
-.toolbar { display:flex; align-items:center; gap:.75rem; margin-bottom:1.25rem; flex-wrap:wrap; }
-.toolbar-left { display:flex; align-items:center; gap:.75rem; flex:1; flex-wrap:wrap; }
-.search-wrap { position:relative; flex:1; min-width:180px; max-width:320px; }
-.search-wrap input { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:.5rem .75rem .5rem 2.25rem; font-family:'DM Sans',sans-serif; font-size:.9rem; color:var(--text); outline:none; transition:border .15s; }
-.search-wrap input:focus { border-color:var(--green); }
-.search-icon { position:absolute; left:.7rem; top:50%; transform:translateY(-50%); color:var(--text3); font-size:.9rem; pointer-events:none; }
-.filter-pills { display:flex; gap:.5rem; flex-wrap:wrap; }
-.pill { background:var(--surface); border:1px solid var(--border); color:var(--text2); font-size:.8rem; font-weight:500; padding:.3rem .75rem; border-radius:99px; cursor:pointer; transition:all .15s; white-space:nowrap; display:flex; align-items:center; gap:.4rem; }
-.pill:hover { border-color:var(--green); color:var(--green); }
-.pill.active { background:var(--green); border-color:var(--green); color:#fff; }
-.pill .pill-del { opacity:.7; font-size:.7rem; margin-left:.1rem; }
-.pill .pill-del:hover { opacity:1; }
-
-.btn-primary { background:var(--green); color:#fff; border:none; font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:600; padding:.55rem 1.1rem; border-radius:var(--radius-sm); cursor:pointer; transition:background .15s; white-space:nowrap; display:flex; align-items:center; gap:.4rem; }
-.btn-primary:hover { background:var(--green-mid); }
-.btn-secondary { background:var(--surface); color:var(--text2); border:1px solid var(--border); font-family:'DM Sans',sans-serif; font-size:.9rem; font-weight:500; padding:.5rem 1rem; border-radius:var(--radius-sm); cursor:pointer; transition:all .15s; white-space:nowrap; }
-.btn-secondary:hover { background:var(--surface2); }
-
-/* GRID */
-.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.25rem; }
-
-.card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:box-shadow .2s, transform .2s; }
-.card:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
-.card-img { width:100%; height:180px; object-fit:cover; display:block; }
-.card-img-placeholder { width:100%; height:180px; background:var(--surface2); display:flex; align-items:center; justify-content:center; }
-.card-img-placeholder svg { width:40px; height:40px; color:var(--border); }
-.card-body { padding:1rem; }
-.card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:.5rem; gap:.5rem; }
-.card-name { font-size:1rem; font-weight:600; color:var(--text); line-height:1.3; }
-.card-actions { display:flex; gap:.25rem; flex-shrink:0; }
-.icon-btn { background:none; border:none; cursor:pointer; padding:.3rem; border-radius:6px; color:var(--text3); transition:all .15s; font-size:.9rem; }
-.icon-btn:hover { background:var(--surface2); }
-.icon-btn.edit:hover { color:#1d6fa4; }
-.icon-btn.del:hover { color:var(--red); }
-.cat-tag { display:inline-block; font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.04em; padding:.2rem .6rem; border-radius:99px; margin-bottom:.75rem; }
-
-.qty-area { margin-bottom:.75rem; }
-.qty-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.4rem; }
-.qty-val { font-size:1.5rem; font-weight:600; font-family:'DM Mono',monospace; color:var(--text); }
-.low-badge { background:var(--red); color:#fff; font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:.15rem .5rem; border-radius:99px; }
-.qty-btns { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
-.qty-btn { border:none; border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:.95rem; font-weight:600; padding:.45rem; cursor:pointer; transition:background .15s; }
-.qty-btn.dec { background:var(--red-light); color:var(--red); }
-.qty-btn.dec:hover { background:#f8d7d5; }
-.qty-btn.inc { background:var(--green-light); color:var(--green); }
-.qty-btn.inc:hover { background:#c8e8d6; }
-.card-notes { font-size:.8rem; color:var(--text3); border-top:1px solid var(--border); padding-top:.6rem; margin-top:.4rem; font-style:italic; }
-.card-date { font-size:.7rem; color:var(--text3); margin-top:.4rem; font-family:'DM Mono',monospace; }
-
-/* EMPTY */
-.empty { text-align:center; padding:4rem 1rem; }
-.empty-icon { font-size:3rem; margin-bottom:.75rem; opacity:.3; }
-.empty-title { font-size:1.1rem; font-weight:600; color:var(--text3); margin-bottom:.25rem; }
-.empty-sub { font-size:.875rem; color:var(--text3); }
-
-/* MODAL OVERLAY */
-.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:500; align-items:center; justify-content:center; padding:1rem; }
-.overlay.open { display:flex; }
-.modal { background:var(--surface); border-radius:var(--radius); width:100%; max-width:480px; max-height:90vh; overflow-y:auto; box-shadow:var(--shadow-lg); }
-.modal-head { display:flex; justify-content:space-between; align-items:center; padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
-.modal-title { font-size:1.125rem; font-weight:600; }
-.modal-close { background:none; border:none; font-size:1.25rem; cursor:pointer; color:var(--text3); padding:.25rem; border-radius:6px; transition:background .15s; }
-.modal-close:hover { background:var(--surface2); }
-.modal-body { padding:1.5rem; }
-.modal-foot { display:flex; gap:.75rem; padding:1.25rem 1.5rem; border-top:1px solid var(--border); }
-.modal-foot .btn-primary,.modal-foot .btn-secondary { flex:1; justify-content:center; }
-
-.form-group { margin-bottom:1rem; }
-.form-label { display:block; font-size:.8rem; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:.04em; margin-bottom:.35rem; }
-.form-input,.form-select,.form-textarea {
-  width:100%; padding:.55rem .8rem; background:var(--surface);
-  border:1px solid var(--border); border-radius:var(--radius-sm);
-  font-family:'DM Sans',sans-serif; font-size:.95rem; color:var(--text);
-  outline:none; transition:border .15s;
-}
-.form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--green); }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.img-preview { margin-top:.5rem; width:100%; max-height:140px; object-fit:cover; border-radius:var(--radius-sm); border:1px solid var(--border); }
-
-/* ADMIN LOGIN MODAL */
-.admin-modal { max-width:360px; }
-.pin-input { text-align:center; font-size:1.5rem; font-family:'DM Mono',monospace; letter-spacing:.3em; }
-.pin-error { color:var(--red); font-size:.85rem; text-align:center; margin-top:.5rem; }
-
-/* CATEGORY MANAGER */
-.cat-manager { padding:1.5rem; }
-.cat-list { display:flex; flex-direction:column; gap:.5rem; margin-bottom:1.25rem; }
-.cat-row { display:flex; align-items:center; justify-content:space-between; padding:.6rem .8rem; background:var(--surface2); border-radius:var(--radius-sm); }
-.cat-row-name { font-size:.9rem; font-weight:500; display:flex; align-items:center; gap:.5rem; }
-.cat-color-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-.cat-add-row { display:flex; gap:.5rem; }
-.cat-add-row input { flex:1; }
-
-/* LOADING */
-.loading-screen { position:fixed; inset:0; background:#fff; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:1rem; z-index:9999; }
-.spinner { width:36px; height:36px; border:3px solid var(--border); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* TOAST */
-.toast { position:fixed; bottom:1.25rem; right:1.25rem; background:var(--text); color:#fff; padding:.6rem 1.1rem; border-radius:var(--radius-sm); font-size:.875rem; font-weight:500; z-index:9999; opacity:0; transform:translateY(8px); transition:all .25s; pointer-events:none; }
-.toast.show { opacity:1; transform:translateY(0); }
+.icon-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--text2);width:30px;height:30px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:background .15s;}
+.icon-toggle:hover{background:var(--border);}
+.btn-admin-login{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;padding:.3rem .65rem;border-radius:7px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.btn-admin-login:hover{background:var(--border);}
+.btn-admin-login.active{background:var(--green);color:#fff;border-color:var(--green);}
 
 /* ADMIN BAR */
-.admin-bar { background:var(--green); color:#fff; padding:.4rem 1.5rem; font-size:.8rem; font-weight:500; display:flex; align-items:center; justify-content:space-between; }
-.admin-bar span { opacity:.85; }
-.admin-bar button { background:rgba(255,255,255,.2); border:none; color:#fff; font-family:'DM Sans',sans-serif; font-size:.75rem; padding:.2rem .7rem; border-radius:6px; cursor:pointer; }
-.admin-bar button:hover { background:rgba(255,255,255,.3); }
+.admin-bar{background:var(--green);color:#fff;padding:.3rem .875rem;font-size:.75rem;font-weight:500;display:flex;align-items:center;justify-content:space-between;}
+.admin-bar button{background:rgba(255,255,255,.2);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:.7rem;padding:.18rem .6rem;border-radius:6px;cursor:pointer;}
+.admin-bar button:hover{background:rgba(255,255,255,.3);}
 
-@media(max-width:600px){
-  .topbar { padding:0 1rem; }
-  .main { padding:1rem; }
-  .form-row { grid-template-columns:1fr; }
-  .grid { grid-template-columns:1fr; }
-  .toolbar { gap:.5rem; }
-}
+.main{max-width:1280px;margin:0 auto;padding:.875rem;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.875rem;}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .75rem;}
+.stat-val{font-size:1.5rem;font-weight:600;font-family:'DM Mono',monospace;line-height:1;margin-bottom:.15rem;}
+.stat-val.blue{color:#1d6fa4;}
+.stat-val.green{color:var(--green);}
+.stat-val.red{color:var(--red);}
+.stat-label{font-size:.65rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+
+/* ALERT */
+.low-alert{background:var(--red-light);border:1px solid rgba(192,57,43,.2);border-radius:var(--radius);padding:.65rem .875rem;margin-bottom:.875rem;}
+.low-alert-title{font-weight:600;color:var(--red);font-size:.82rem;margin-bottom:.3rem;}
+.low-alert-item{font-size:.78rem;color:var(--red);opacity:.85;padding:.08rem 0;}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;gap:.45rem;margin-bottom:.875rem;flex-wrap:wrap;}
+.toolbar-left{display:flex;align-items:center;gap:.45rem;flex:1;min-width:0;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:120px;}
+.search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.42rem .6rem .42rem 1.9rem;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--text);outline:none;transition:border .15s;}
+.search-wrap input::placeholder{color:var(--text3);}
+.search-wrap input:focus{border-color:var(--green);}
+.search-icon{position:absolute;left:.55rem;top:50%;transform:translateY(-50%);color:var(--text3);font-size:.78rem;pointer-events:none;}
+.filter-pills{display:flex;gap:.35rem;flex-wrap:wrap;}
+.pill{background:var(--surface);border:1px solid var(--border);color:var(--text2);font-size:.68rem;font-weight:600;padding:.22rem .55rem;border-radius:99px;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.pill:hover{border-color:var(--green);color:var(--green);}
+.pill.active{background:var(--green);border-color:var(--green);color:#fff;}
+
+.btn-primary{background:var(--green);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:.42rem .85rem;border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;white-space:nowrap;display:flex;align-items:center;gap:.3rem;}
+.btn-primary:hover{background:var(--green-mid);}
+.btn-secondary{background:var(--surface);color:var(--text2);border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;padding:.38rem .75rem;border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.btn-secondary:hover{background:var(--surface2);}
+
+/* GRID — 2 col on phones, scales up */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;}
+@media(min-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:.75rem;}}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr);gap:.875rem;}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:1280px){.grid{grid-template-columns:repeat(5,1fr);}}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s;}
+.card:hover{box-shadow:var(--shadow-lg);}
+.card-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
+.card-img-placeholder{width:100%;aspect-ratio:1/1;background:var(--surface2);display:flex;align-items:center;justify-content:center;}
+.card-img-placeholder svg{width:24px;height:24px;color:var(--border);}
+.card-body{padding:.55rem .6rem .65rem;}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.25rem;gap:.25rem;}
+.card-name{font-size:.8rem;font-weight:600;color:var(--text);line-height:1.3;word-break:break-word;}
+.card-actions{display:flex;gap:.1rem;flex-shrink:0;}
+.icon-btn{background:none;border:none;cursor:pointer;padding:.18rem;border-radius:5px;color:var(--text3);transition:all .15s;font-size:.75rem;line-height:1;}
+.icon-btn:hover{background:var(--surface2);}
+.icon-btn.edit:hover{color:#1d6fa4;}
+.icon-btn.del:hover{color:var(--red);}
+.cat-tag{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .45rem;border-radius:99px;margin-bottom:.45rem;}
+
+.qty-area{margin-bottom:.45rem;}
+.qty-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.3rem;gap:.2rem;}
+.qty-val{font-size:1.1rem;font-weight:600;font-family:'DM Mono',monospace;color:var(--text);line-height:1;}
+.qty-unit{font-size:.65rem;font-weight:400;color:var(--text3);margin-left:.1rem;}
+.low-badge{background:var(--red);color:#fff;font-size:.55rem;font-weight:700;text-transform:uppercase;padding:.1rem .35rem;border-radius:99px;flex-shrink:0;}
+.qty-btns{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;}
+.qty-btn{border:none;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:.88rem;font-weight:700;padding:.38rem .3rem;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent;}
+.qty-btn.dec{background:var(--red-light);color:var(--red);}
+.qty-btn.dec:active{filter:brightness(.9);}
+.qty-btn.inc{background:var(--green-light);color:var(--green);}
+.qty-btn.inc:active{filter:brightness(.9);}
+.card-notes{font-size:.68rem;color:var(--text3);border-top:1px solid var(--border);padding-top:.38rem;margin-top:.3rem;font-style:italic;line-height:1.4;}
+.card-date{font-size:.6rem;color:var(--text3);margin-top:.25rem;font-family:'DM Mono',monospace;}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;}
+.empty-icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.25;}
+.empty-title{font-size:.95rem;font-weight:600;color:var(--text3);margin-bottom:.2rem;}
+.empty-sub{font-size:.8rem;color:var(--text3);}
+
+/* MODALS — slide up from bottom on mobile, centred on desktop */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+@media(min-width:600px){.overlay{align-items:center;padding:1rem;}}
+.modal{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;width:100%;max-width:500px;max-height:93vh;overflow-y:auto;box-shadow:var(--shadow-lg);}
+@media(min-width:600px){.modal{border-radius:var(--radius);}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;}
+.modal-title{font-size:.95rem;font-weight:600;}
+.modal-close{background:none;border:none;font-size:1.05rem;cursor:pointer;color:var(--text3);padding:.25rem;border-radius:6px;}
+.modal-close:hover{background:var(--surface2);}
+.modal-body{padding:1.1rem;}
+.modal-foot{display:flex;gap:.55rem;padding:.9rem 1.1rem;border-top:1px solid var(--border);position:sticky;bottom:0;background:var(--surface);}
+.modal-foot .btn-primary,.modal-foot .btn-secondary{flex:1;justify-content:center;}
+
+.form-group{margin-bottom:.85rem;}
+.form-label{display:block;font-size:.7rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.28rem;}
+.form-input,.form-select,.form-textarea{width:100%;padding:.48rem .72rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border .15s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green);}
+.form-select option{background:var(--surface);color:var(--text);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+
+/* IMAGE RESIZE TOOL */
+.img-tool-wrap{margin-top:.5rem;}
+.img-canvas-wrap{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:.5rem;cursor:crosshair;user-select:none;touch-action:none;}
+.img-canvas-wrap canvas{display:block;width:100%;height:auto;}
+.img-tool-controls{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;}
+.img-tool-controls label{font-size:.72rem;color:var(--text2);font-weight:500;white-space:nowrap;}
+.range-input{flex:1;min-width:70px;accent-color:var(--green);cursor:pointer;}
+.img-preview-thumb{width:100%;max-height:110px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:.5rem;display:none;}
+
+/* ADMIN LOGIN */
+.admin-modal{max-width:320px;}
+.pin-input{text-align:center;font-size:1.4rem;font-family:'DM Mono',monospace;letter-spacing:.3em;}
+.pin-error{color:var(--red);font-size:.8rem;text-align:center;margin-top:.45rem;}
+
+/* CATEGORY MANAGER */
+.cat-list{display:flex;flex-direction:column;gap:.38rem;margin-bottom:.9rem;}
+.cat-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem .65rem;background:var(--surface2);border-radius:var(--radius-sm);}
+.cat-row-name{font-size:.83rem;font-weight:500;display:flex;align-items:center;gap:.4rem;}
+.cat-color-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cat-add-row{display:flex;gap:.45rem;}
+.cat-add-row input{flex:1;}
+
+/* LOADING */
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.7rem;z-index:9999;}
+.spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TOAST */
+.toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%) translateY(8px);background:var(--text);color:var(--bg);padding:.5rem 1rem;border-radius:var(--radius-sm);font-size:.8rem;font-weight:500;z-index:9999;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
 
 <div class="loading-screen" id="loadingScreen">
   <div class="spinner"></div>
-  <span style="font-size:.9rem;color:var(--text3)">Connecting to database…</span>
+  <span style="font-size:.82rem;color:var(--text3)">Connecting…</span>
 </div>
 
-<!-- Admin bar (only visible when logged in as admin) -->
 <div class="admin-bar" id="adminBar" style="display:none">
-  <span>🔐 Admin mode — you have full access</span>
+  <span>🔐 Admin mode</span>
   <button onclick="adminLogout()">Log out</button>
 </div>
 
-<!-- Top bar -->
 <div class="topbar">
   <div class="topbar-left">
-    <div class="logo-wrap" id="logoWrap">
-      <span class="logo-icon">📦</span>
-    </div>
+    <div class="logo-wrap" id="logoWrap"><span class="logo-icon">📦</span></div>
     <span class="app-name">FHP Inventory</span>
   </div>
   <div class="topbar-right">
-    <span class="badge-live connecting" id="connBadge"><span class="dot"></span><span id="connText">Connecting</span></span>
+    <span class="badge-live connecting" id="connBadge"><span class="dot"></span><span id="connText">…</span></span>
+    <button class="icon-toggle" id="darkToggle" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
     <button class="btn-admin-login" id="adminLoginBtn" onclick="openAdminLogin()">Admin</button>
   </div>
 </div>
 
-<!-- Main -->
 <div class="main">
-
-  <!-- Stats -->
   <div class="stats-row">
-    <div class="stat"><div class="stat-val blue" id="statTotal">0</div><div class="stat-label">Total Products</div></div>
+    <div class="stat"><div class="stat-val blue" id="statTotal">0</div><div class="stat-label">Total</div></div>
     <div class="stat"><div class="stat-val green" id="statInStock">0</div><div class="stat-label">In Stock</div></div>
     <div class="stat"><div class="stat-val red" id="statLow">0</div><div class="stat-label">Low Stock</div></div>
   </div>
 
-  <!-- Low stock alert -->
   <div class="low-alert" id="lowAlert" style="display:none">
     <div class="low-alert-title">⚠️ Low Stock Alert</div>
     <div id="lowAlertItems"></div>
   </div>
 
-  <!-- Toolbar -->
   <div class="toolbar">
     <div class="toolbar-left">
       <div class="search-wrap">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search products…" oninput="renderProducts()">
+        <input type="text" id="searchInput" placeholder="Search…" oninput="renderProducts()">
       </div>
       <div class="filter-pills" id="filterPills"></div>
     </div>
-    <button class="btn-primary" id="addProductBtn" style="display:none" onclick="openProductModal()">+ Add Product</button>
-    <button class="btn-secondary" id="manageCatsBtn" style="display:none" onclick="openCatManager()">⚙ Categories</button>
+    <button class="btn-primary" id="addProductBtn" style="display:none" onclick="openProductModal()">+ Add</button>
+    <button class="btn-secondary" id="manageCatsBtn" style="display:none" onclick="openCatManager()">⚙ Cats</button>
   </div>
 
-  <!-- Grid -->
   <div class="grid" id="grid"></div>
   <div class="empty" id="emptyState" style="display:none">
     <div class="empty-icon">📦</div>
-    <div class="empty-title">No products yet</div>
+    <div class="empty-title">No products found</div>
     <div class="empty-sub" id="emptySubText">Ask an admin to add products</div>
   </div>
 </div>
 
-<!-- ADMIN LOGIN MODAL -->
+<!-- ADMIN LOGIN -->
 <div class="overlay" id="adminLoginOverlay">
   <div class="modal admin-modal">
-    <div class="modal-head">
-      <span class="modal-title">Admin Login</span>
-      <button class="modal-close" onclick="closeOverlay('adminLoginOverlay')">✕</button>
-    </div>
+    <div class="modal-head"><span class="modal-title">Admin Login</span><button class="modal-close" onclick="closeOverlay('adminLoginOverlay')">✕</button></div>
     <div class="modal-body">
       <div class="form-group">
-        <label class="form-label">Enter PIN</label>
+        <label class="form-label">PIN</label>
         <input type="password" id="pinInput" class="form-input pin-input" maxlength="10" placeholder="••••" onkeydown="if(event.key==='Enter')checkPin()">
       </div>
-      <div class="pin-error" id="pinError" style="display:none">Incorrect PIN. Try again.</div>
+      <div class="pin-error" id="pinError" style="display:none">Incorrect PIN.</div>
     </div>
     <div class="modal-foot">
       <button class="btn-secondary" onclick="closeOverlay('adminLoginOverlay')">Cancel</button>
@@ -286,14 +263,11 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
 <!-- PRODUCT MODAL -->
 <div class="overlay" id="productOverlay">
   <div class="modal">
-    <div class="modal-head">
-      <span class="modal-title" id="productModalTitle">Add Product</span>
-      <button class="modal-close" onclick="closeOverlay('productOverlay')">✕</button>
-    </div>
+    <div class="modal-head"><span class="modal-title" id="productModalTitle">Add Product</span><button class="modal-close" onclick="closeOverlay('productOverlay')">✕</button></div>
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Product Name *</label>
-        <input type="text" id="fName" class="form-input" placeholder="e.g. Termite Treatment Spray">
+        <input type="text" id="fName" class="form-input" placeholder="e.g. Termite Spray">
       </div>
       <div class="form-group">
         <label class="form-label">Category</label>
@@ -319,16 +293,27 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
       </div>
       <div class="form-group">
         <label class="form-label">Reorder Level</label>
-        <input type="number" id="fReorder" class="form-input" step="0.1" min="0" placeholder="Alert below this amount">
+        <input type="number" id="fReorder" class="form-input" step="0.1" min="0" placeholder="Alert below this">
       </div>
       <div class="form-group">
         <label class="form-label">Product Image</label>
-        <input type="file" id="fImage" class="form-input" accept="image/*" onchange="previewImage(this)">
-        <img id="fImagePreview" class="img-preview" style="display:none">
+        <input type="file" id="fImage" class="form-input" accept="image/*" onchange="loadImageForCrop(this)">
+        <div class="img-tool-wrap" id="imgToolWrap" style="display:none">
+          <div class="img-canvas-wrap" id="imgCanvasWrap">
+            <canvas id="imgCanvas"></canvas>
+          </div>
+          <div class="img-tool-controls">
+            <label>Zoom</label>
+            <input type="range" class="range-input" id="imgZoom" min="0.1" max="5" step="0.01" value="1" oninput="drawCrop()">
+            <button type="button" class="btn-secondary" style="font-size:.72rem;padding:.28rem .55rem" onclick="resetCrop()">Reset</button>
+            <button type="button" class="btn-primary" style="font-size:.72rem;padding:.28rem .55rem" onclick="applyCrop()">✓ Apply</button>
+          </div>
+        </div>
+        <img id="fImagePreview" class="img-preview-thumb">
       </div>
       <div class="form-group">
         <label class="form-label">Notes</label>
-        <textarea id="fNotes" class="form-textarea" rows="2" placeholder="Storage location, usage tips…"></textarea>
+        <textarea id="fNotes" class="form-textarea" rows="2" placeholder="Storage location, tips…"></textarea>
       </div>
     </div>
     <div class="modal-foot">
@@ -338,17 +323,14 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   </div>
 </div>
 
-<!-- CATEGORY MANAGER MODAL -->
+<!-- CATEGORY MANAGER -->
 <div class="overlay" id="catOverlay">
   <div class="modal">
-    <div class="modal-head">
-      <span class="modal-title">Manage Categories</span>
-      <button class="modal-close" onclick="closeOverlay('catOverlay')">✕</button>
-    </div>
-    <div class="cat-manager">
+    <div class="modal-head"><span class="modal-title">Categories</span><button class="modal-close" onclick="closeOverlay('catOverlay')">✕</button></div>
+    <div class="modal-body">
       <div class="cat-list" id="catList"></div>
       <div class="cat-add-row">
-        <input type="text" id="newCatInput" class="form-input" placeholder="New category name…" onkeydown="if(event.key==='Enter')addCategory()">
+        <input type="text" id="newCatInput" class="form-input" placeholder="New category…" onkeydown="if(event.key==='Enter')addCategory()">
         <button class="btn-primary" onclick="addCategory()">Add</button>
       </div>
     </div>
@@ -358,9 +340,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text)
   </div>
 </div>
 
-<!-- LOGO UPLOAD (admin only, hidden input triggered from topbar) -->
 <input type="file" id="logoUploadInput" accept="image/*" style="display:none" onchange="uploadLogo(this)">
-
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -383,79 +363,79 @@ const CAT_COLORS = ["#1a7a4a","#1d6fa4","#d97706","#c0392b","#7c3aed","#0891b2",
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window._db = db;
-window._ref = ref;
-window._set = set;
-window._remove = remove;
-window._push = push;
-window._update = update;
-
-let products = {};
-let categories = {};
-let isAdmin = false;
-let editingProductId = null;
-let activeFilter = "all";
+let products = {}, categories = {};
+let isAdmin = false, editingProductId = null, activeFilter = "all";
 let toastTimer = null;
 
-// Connection status
+// ---- DARK MODE ----
+const savedTheme = localStorage.getItem('fhp-theme') || 'light';
+if (savedTheme === 'dark') {
+  document.documentElement.setAttribute('data-theme','dark');
+  document.getElementById('darkToggle').textContent = '☀️';
+}
+window.toggleDark = function() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('darkToggle').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('fhp-theme', isDark ? 'light' : 'dark');
+};
+
+// ---- FIREBASE LISTENERS ----
 onValue(ref(db, '.info/connected'), snap => {
-  const online = !!snap.val();
-  const badge = document.getElementById('connBadge');
-  const text = document.getElementById('connText');
-  badge.className = 'badge-live ' + (online ? 'online' : 'offline');
-  text.textContent = online ? 'Live' : 'Offline';
+  const on = !!snap.val();
+  document.getElementById('connBadge').className = 'badge-live ' + (on ? 'online' : 'offline');
+  document.getElementById('connText').textContent = on ? 'Live' : 'Offline';
 });
-
-// Logo
 onValue(ref(db, 'logo'), snap => {
-  if (snap.val()) {
-    document.getElementById('logoWrap').innerHTML = '<img src="' + snap.val() + '" alt="logo">';
-  }
+  if (snap.val()) document.getElementById('logoWrap').innerHTML = '<img src="' + snap.val() + '">';
 });
-
-// Categories
 onValue(ref(db, 'categories'), snap => {
   categories = snap.val() || {};
-  renderFilterPills();
-  populateCategorySelect();
-  renderCatList();
+  renderFilterPills(); populateCategorySelect(); renderCatList();
 });
-
-// Products
 onValue(ref(db, 'products'), snap => {
   document.getElementById('loadingScreen').style.display = 'none';
   products = snap.val() || {};
   renderProducts();
 });
 
+// ---- LOGO ----
+document.getElementById('logoWrap').addEventListener('click', () => {
+  if (isAdmin) document.getElementById('logoUploadInput').click();
+});
+window.uploadLogo = function(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = async e => { await set(ref(db,'logo'), e.target.result); showToast('✅ Logo updated'); };
+  r.readAsDataURL(f);
+};
+
 // ---- ADMIN ----
 window.openAdminLogin = function() {
-  if (isAdmin) return; // already in, clicking again does nothing
+  if (isAdmin) return;
   document.getElementById('pinInput').value = '';
   document.getElementById('pinError').style.display = 'none';
   document.getElementById('adminLoginOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('pinInput').focus(), 100);
+  setTimeout(() => document.getElementById('pinInput').focus(), 150);
 };
-
 window.checkPin = function() {
-  const val = document.getElementById('pinInput').value.trim();
-  if (val === ADMIN_PIN) {
+  if (document.getElementById('pinInput').value.trim() === ADMIN_PIN) {
     isAdmin = true;
-    document.getElementById('adminLoginOverlay').classList.remove('open');
+    closeOverlay('adminLoginOverlay');
     document.getElementById('adminBar').style.display = 'flex';
     document.getElementById('adminLoginBtn').textContent = '🔐 Admin';
     document.getElementById('adminLoginBtn').classList.add('active');
     document.getElementById('addProductBtn').style.display = 'flex';
     document.getElementById('manageCatsBtn').style.display = 'flex';
+    document.getElementById('logoWrap').style.cursor = 'pointer';
+    document.getElementById('logoWrap').title = 'Click to change logo';
     showToast('✅ Welcome, admin!');
     renderProducts();
   } else {
     document.getElementById('pinError').style.display = 'block';
     document.getElementById('pinInput').value = '';
-    document.getElementById('pinInput').focus();
   }
 };
-
 window.adminLogout = function() {
   isAdmin = false;
   document.getElementById('adminBar').style.display = 'none';
@@ -463,274 +443,261 @@ window.adminLogout = function() {
   document.getElementById('adminLoginBtn').classList.remove('active');
   document.getElementById('addProductBtn').style.display = 'none';
   document.getElementById('manageCatsBtn').style.display = 'none';
-  showToast('Logged out of admin');
+  document.getElementById('logoWrap').style.cursor = 'default';
+  document.getElementById('logoWrap').removeAttribute('title');
+  showToast('Logged out');
   renderProducts();
-};
-
-// ---- LOGO ----
-document.getElementById('logoWrap').addEventListener('click', () => {
-  if (isAdmin) document.getElementById('logoUploadInput').click();
-});
-document.getElementById('logoWrap').style.cursor = 'default';
-
-window.uploadLogo = function(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async e => {
-    await set(ref(db, 'logo'), e.target.result);
-    showToast('✅ Logo updated');
-  };
-  reader.readAsDataURL(file);
 };
 
 // ---- CATEGORIES ----
 function getCatColor(id) {
   const c = categories[id];
   if (c && c.color) return c.color;
-  const keys = Object.keys(categories);
-  return CAT_COLORS[keys.indexOf(id) % CAT_COLORS.length] || '#888';
+  return CAT_COLORS[Object.keys(categories).indexOf(id) % CAT_COLORS.length] || '#888';
 }
-
 function renderFilterPills() {
-  const pills = document.getElementById('filterPills');
-  const catArr = Object.entries(categories);
   let html = '<button class="pill' + (activeFilter==='all'?' active':'') + '" onclick="setFilter(\'all\')">All</button>';
-  catArr.forEach(([id, cat]) => {
-    const color = getCatColor(id);
-    html += '<button class="pill' + (activeFilter===id?' active':'') + '" onclick="setFilter(\'' + id + '\')" style="' + (activeFilter===id?'background:'+color+';border-color:'+color+';':'border-color:'+color+';color:'+color+';') + '">' + cat.name + '</button>';
+  Object.entries(categories).forEach(([id, cat]) => {
+    const col = getCatColor(id);
+    const sel = activeFilter === id;
+    html += '<button class="pill' + (sel?' active':'') + '" onclick="setFilter(\'' + id + '\')" style="' + (sel ? 'background:'+col+';border-color:'+col+';' : 'border-color:'+col+';color:'+col+';') + '">' + cat.name + '</button>';
   });
-  pills.innerHTML = html;
+  document.getElementById('filterPills').innerHTML = html;
 }
-
-window.setFilter = function(id) {
-  activeFilter = id;
-  renderFilterPills();
-  renderProducts();
-};
-
+window.setFilter = function(id) { activeFilter = id; renderFilterPills(); renderProducts(); };
 function populateCategorySelect() {
   const sel = document.getElementById('fCategory');
   const prev = sel.value;
   sel.innerHTML = '<option value="">— No category —</option>';
-  Object.entries(categories).forEach(([id, cat]) => {
-    sel.innerHTML += '<option value="' + id + '">' + cat.name + '</option>';
-  });
+  Object.entries(categories).forEach(([id, cat]) => { sel.innerHTML += '<option value="' + id + '">' + cat.name + '</option>'; });
   if (prev) sel.value = prev;
 }
-
 function renderCatList() {
   const list = document.getElementById('catList');
-  const entries = Object.entries(categories);
-  if (entries.length === 0) {
-    list.innerHTML = '<div style="font-size:.85rem;color:var(--text3);padding:.5rem 0">No categories yet.</div>';
-    return;
-  }
-  list.innerHTML = entries.map(([id, cat]) => {
-    const color = getCatColor(id);
-    return '<div class="cat-row"><div class="cat-row-name"><span class="cat-color-dot" style="background:' + color + '"></span>' + cat.name + '</div><button class="icon-btn del" onclick="deleteCategory(\'' + id + '\')">🗑️</button></div>';
+  const ents = Object.entries(categories);
+  if (!ents.length) { list.innerHTML = '<div style="font-size:.8rem;color:var(--text3)">No categories yet.</div>'; return; }
+  list.innerHTML = ents.map(([id, cat]) => {
+    const col = getCatColor(id);
+    return '<div class="cat-row"><div class="cat-row-name"><span class="cat-color-dot" style="background:' + col + '"></span>' + cat.name + '</div><button class="icon-btn del" onclick="deleteCategory(\'' + id + '\')">🗑️</button></div>';
   }).join('');
 }
-
-window.openCatManager = function() {
-  renderCatList();
-  document.getElementById('catOverlay').classList.add('open');
-};
-
+window.openCatManager = function() { renderCatList(); document.getElementById('catOverlay').classList.add('open'); };
 window.addCategory = async function() {
-  const input = document.getElementById('newCatInput');
-  const name = input.value.trim();
-  if (!name) return;
-  const idx = Object.keys(categories).length;
-  await push(ref(db, 'categories'), { name, color: CAT_COLORS[idx % CAT_COLORS.length] });
-  input.value = '';
+  const inp = document.getElementById('newCatInput');
+  const name = inp.value.trim(); if (!name) return;
+  await push(ref(db,'categories'), { name, color: CAT_COLORS[Object.keys(categories).length % CAT_COLORS.length] });
+  inp.value = '';
   showToast('✅ Category added');
 };
-
 window.deleteCategory = async function(id) {
-  if (!confirm('Delete this category? Products in it will become uncategorized.')) return;
-  await remove(ref(db, 'categories/' + id));
-  // Remove category from products that used it
+  if (!confirm('Delete this category?')) return;
+  await remove(ref(db,'categories/'+id));
   const updates = {};
-  Object.entries(products).forEach(([pid, p]) => {
-    if (p.categoryId === id) updates['products/' + pid + '/categoryId'] = null;
-  });
+  Object.entries(products).forEach(([pid, p]) => { if (p.categoryId === id) updates['products/'+pid+'/categoryId'] = null; });
   if (Object.keys(updates).length) await update(ref(db), updates);
   showToast('🗑️ Category deleted');
 };
+
+// ---- IMAGE CROP/RESIZE TOOL ----
+let cropImg = null, cropOffX = 0, cropOffY = 0, cropZoom = 1;
+let dragStart = null, dragOff = null;
+let croppedDataUrl = null;
+const OUTPUT_W = 480, OUTPUT_H = 480; // square output
+
+window.loadImageForCrop = function(inp) {
+  const f = inp.files[0]; if (!f) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      cropImg = img;
+      const canvas = document.getElementById('imgCanvas');
+      const wrap = document.getElementById('imgCanvasWrap');
+      canvas.width = OUTPUT_W; canvas.height = OUTPUT_H;
+      const dispW = wrap.offsetWidth || 280;
+      canvas.style.height = dispW + 'px';
+      const scale = Math.max(OUTPUT_W / img.width, OUTPUT_H / img.height);
+      cropZoom = scale;
+      document.getElementById('imgZoom').min = scale * 0.4;
+      document.getElementById('imgZoom').max = scale * 5;
+      document.getElementById('imgZoom').value = scale;
+      cropOffX = (OUTPUT_W - img.width * scale) / 2;
+      cropOffY = (OUTPUT_H - img.height * scale) / 2;
+      drawCrop();
+      document.getElementById('imgToolWrap').style.display = 'block';
+      document.getElementById('fImagePreview').style.display = 'none';
+      croppedDataUrl = null;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(f);
+};
+window.drawCrop = function() {
+  if (!cropImg) return;
+  cropZoom = parseFloat(document.getElementById('imgZoom').value);
+  const canvas = document.getElementById('imgCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,OUTPUT_W,OUTPUT_H);
+  ctx.drawImage(cropImg, cropOffX, cropOffY, cropImg.width * cropZoom, cropImg.height * cropZoom);
+};
+window.resetCrop = function() {
+  if (!cropImg) return;
+  const scale = Math.max(OUTPUT_W / cropImg.width, OUTPUT_H / cropImg.height);
+  cropZoom = scale;
+  document.getElementById('imgZoom').value = scale;
+  cropOffX = (OUTPUT_W - cropImg.width * scale) / 2;
+  cropOffY = (OUTPUT_H - cropImg.height * scale) / 2;
+  drawCrop();
+};
+window.applyCrop = function() {
+  const canvas = document.getElementById('imgCanvas');
+  croppedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+  const prev = document.getElementById('fImagePreview');
+  prev.src = croppedDataUrl; prev.style.display = 'block';
+  document.getElementById('imgToolWrap').style.display = 'none';
+  showToast('✅ Image applied');
+};
+
+// Drag to pan
+const canvasWrap = document.getElementById('imgCanvasWrap');
+function getPos(e) {
+  if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  return { x: e.clientX, y: e.clientY };
+}
+canvasWrap.addEventListener('mousedown', e => { dragStart = getPos(e); dragOff = { x: cropOffX, y: cropOffY }; });
+canvasWrap.addEventListener('touchstart', e => { dragStart = getPos(e); dragOff = { x: cropOffX, y: cropOffY }; }, { passive:true });
+function onMove(e) {
+  if (!dragStart) return;
+  const rect = document.getElementById('imgCanvas').getBoundingClientRect();
+  const scale = OUTPUT_W / rect.width;
+  const p = getPos(e);
+  cropOffX = dragOff.x + (p.x - dragStart.x) * scale;
+  cropOffY = dragOff.y + (p.y - dragStart.y) * scale;
+  drawCrop();
+}
+window.addEventListener('mousemove', onMove);
+window.addEventListener('touchmove', onMove, { passive:true });
+window.addEventListener('mouseup', () => { dragStart = null; });
+window.addEventListener('touchend', () => { dragStart = null; });
 
 // ---- PRODUCTS ----
 window.renderProducts = function() {
   const grid = document.getElementById('grid');
   const empty = document.getElementById('emptyState');
   const search = document.getElementById('searchInput').value.toLowerCase();
-
-  let arr = Object.entries(products).map(([id, p]) => ({ ...p, id }));
+  let arr = Object.entries(products).map(([id,p]) => ({...p,id}));
   if (activeFilter !== 'all') arr = arr.filter(p => p.categoryId === activeFilter);
-  if (search) arr = arr.filter(p => p.name.toLowerCase().includes(search) || (p.notes||'').toLowerCase().includes(search));
+  if (search) arr = arr.filter(p => (p.name||'').toLowerCase().includes(search) || (p.notes||'').toLowerCase().includes(search));
 
-  // Stats (full set, no filter)
   const all = Object.values(products);
   document.getElementById('statTotal').textContent = all.length;
   document.getElementById('statInStock').textContent = all.filter(p => p.quantity > (p.reorderLevel||0)).length;
-  const lowArr = all.filter(p => p.quantity <= (p.reorderLevel||0));
-  document.getElementById('statLow').textContent = lowArr.length;
-
+  const low = all.filter(p => p.quantity <= (p.reorderLevel||0));
+  document.getElementById('statLow').textContent = low.length;
   const alertBox = document.getElementById('lowAlert');
-  if (lowArr.length) {
+  if (low.length) {
     alertBox.style.display = 'block';
-    document.getElementById('lowAlertItems').innerHTML = lowArr.map(p =>
-      '<div class="low-alert-item">• ' + p.name + ' — ' + p.quantity + ' ' + p.unit + ' remaining</div>'
-    ).join('');
-  } else {
-    alertBox.style.display = 'none';
-  }
+    document.getElementById('lowAlertItems').innerHTML = low.map(p => '<div class="low-alert-item">• ' + p.name + ' — ' + p.quantity + ' ' + p.unit + '</div>').join('');
+  } else alertBox.style.display = 'none';
 
-  if (arr.length === 0) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    document.getElementById('emptySubText').textContent = isAdmin ? 'Click "+ Add Product" to get started' : 'No products found';
+  if (!arr.length) {
+    grid.innerHTML = ''; empty.style.display = 'block';
+    document.getElementById('emptySubText').textContent = isAdmin ? 'Click "+ Add" to get started' : 'No products found';
     return;
   }
   empty.style.display = 'none';
 
   grid.innerHTML = arr.map(p => {
     const cat = p.categoryId && categories[p.categoryId];
-    const color = p.categoryId ? getCatColor(p.categoryId) : null;
+    const col = p.categoryId ? getCatColor(p.categoryId) : null;
     const isLow = p.quantity <= (p.reorderLevel||0);
     const imgHtml = p.image
       ? '<img class="card-img" src="' + p.image + '" alt="' + p.name + '">'
       : '<div class="card-img-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
-    const adminActions = isAdmin
-      ? '<button class="icon-btn edit" title="Edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="icon-btn del" title="Delete" onclick="deleteProduct(\'' + p.id + '\')">🗑️</button>'
+    const adminActs = isAdmin
+      ? '<button class="icon-btn edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="icon-btn del" onclick="deleteProduct(\'' + p.id + '\')">🗑️</button>'
       : '';
-    const catBadge = cat
-      ? '<div class="cat-tag" style="background:' + color + '22;color:' + color + '">' + cat.name + '</div>'
-      : '';
+    const catBadge = cat ? '<div class="cat-tag" style="background:' + col + '22;color:' + col + '">' + cat.name + '</div>' : '';
     return '<div class="card">' + imgHtml +
       '<div class="card-body">' +
-        '<div class="card-header"><span class="card-name">' + p.name + '</span><div class="card-actions">' + adminActions + '</div></div>' +
+        '<div class="card-header"><span class="card-name">' + p.name + '</span><div class="card-actions">' + adminActs + '</div></div>' +
         catBadge +
-        '<div class="qty-area">' +
-          '<div class="qty-row"><span class="qty-val">' + p.quantity + ' <span style="font-size:.85rem;font-weight:400;color:var(--text3)">' + p.unit + '</span></span>' + (isLow ? '<span class="low-badge">LOW</span>' : '') + '</div>' +
-          '<div class="qty-btns"><button class="qty-btn dec" onclick="adjustQty(\'' + p.id + '\',-1)">− 1</button><button class="qty-btn inc" onclick="adjustQty(\'' + p.id + '\',1)">+ 1</button></div>' +
-        '</div>' +
+        '<div class="qty-area"><div class="qty-row"><span class="qty-val">' + p.quantity + '<span class="qty-unit">' + p.unit + '</span></span>' + (isLow ? '<span class="low-badge">LOW</span>' : '') + '</div>' +
+        '<div class="qty-btns"><button class="qty-btn dec" onclick="adjustQty(\'' + p.id + '\',-1)">−1</button><button class="qty-btn inc" onclick="adjustQty(\'' + p.id + '\',1)">+1</button></div></div>' +
         (p.notes ? '<div class="card-notes">' + p.notes + '</div>' : '') +
-        '<div class="card-date">Updated ' + (p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : '—') + '</div>' +
+        '<div class="card-date">' + (p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : '—') + '</div>' +
       '</div></div>';
   }).join('');
 };
 
 window.adjustQty = async function(id, delta) {
-  const p = products[id];
-  if (!p) return;
-  const newQty = Math.max(0, (p.quantity || 0) + delta);
-  await update(ref(db, 'products/' + id), { quantity: newQty, lastUpdated: new Date().toISOString() });
+  const p = products[id]; if (!p) return;
+  await update(ref(db,'products/'+id), { quantity: Math.max(0,(p.quantity||0)+delta), lastUpdated: new Date().toISOString() });
 };
-
 window.deleteProduct = async function(id) {
   if (!confirm('Delete this product?')) return;
-  await remove(ref(db, 'products/' + id));
+  await remove(ref(db,'products/'+id));
   showToast('🗑️ Product deleted');
 };
-
 window.openProductModal = function() {
   editingProductId = null;
   document.getElementById('productModalTitle').textContent = 'Add Product';
   document.getElementById('productSubmitBtn').textContent = 'Add Product';
   ['fName','fQty','fReorder','fNotes'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('fUnit').value = 'gallons';
-  document.getElementById('fCategory').value = '';
   document.getElementById('fImage').value = '';
   document.getElementById('fImagePreview').style.display = 'none';
+  document.getElementById('imgToolWrap').style.display = 'none';
+  croppedDataUrl = null; cropImg = null;
   populateCategorySelect();
+  document.getElementById('fCategory').value = '';
   document.getElementById('productOverlay').classList.add('open');
 };
-
 window.editProduct = function(id) {
-  const p = products[id];
-  if (!p) return;
+  const p = products[id]; if (!p) return;
   editingProductId = id;
   document.getElementById('productModalTitle').textContent = 'Edit Product';
   document.getElementById('productSubmitBtn').textContent = 'Save Changes';
-  document.getElementById('fName').value = p.name || '';
-  document.getElementById('fQty').value = p.quantity ?? '';
-  document.getElementById('fUnit').value = p.unit || 'gallons';
-  document.getElementById('fReorder').value = p.reorderLevel ?? '';
-  document.getElementById('fNotes').value = p.notes || '';
-  populateCategorySelect();
-  document.getElementById('fCategory').value = p.categoryId || '';
+  document.getElementById('fName').value = p.name||'';
+  document.getElementById('fQty').value = p.quantity??'';
+  document.getElementById('fUnit').value = p.unit||'gallons';
+  document.getElementById('fReorder').value = p.reorderLevel??'';
+  document.getElementById('fNotes').value = p.notes||'';
   document.getElementById('fImage').value = '';
+  document.getElementById('imgToolWrap').style.display = 'none';
+  croppedDataUrl = null; cropImg = null;
+  populateCategorySelect();
+  document.getElementById('fCategory').value = p.categoryId||'';
   const prev = document.getElementById('fImagePreview');
-  if (p.image) { prev.src = p.image; prev.style.display = 'block'; }
-  else { prev.style.display = 'none'; }
+  if (p.image) { prev.src = p.image; prev.style.display = 'block'; } else prev.style.display = 'none';
   document.getElementById('productOverlay').classList.add('open');
 };
-
-window.previewImage = function(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const prev = document.getElementById('fImagePreview');
-    prev.src = e.target.result;
-    prev.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-};
-
 window.submitProduct = async function() {
   const name = document.getElementById('fName').value.trim();
   const qty = parseFloat(document.getElementById('fQty').value);
-  if (!name || isNaN(qty)) { alert('Please enter a product name and quantity.'); return; }
-
+  if (!name || isNaN(qty)) { alert('Please enter a name and quantity.'); return; }
   const prev = document.getElementById('fImagePreview');
   const product = {
-    name,
-    categoryId: document.getElementById('fCategory').value || null,
-    quantity: qty,
-    unit: document.getElementById('fUnit').value,
-    reorderLevel: parseFloat(document.getElementById('fReorder').value) || 0,
+    name, categoryId: document.getElementById('fCategory').value||null,
+    quantity: qty, unit: document.getElementById('fUnit').value,
+    reorderLevel: parseFloat(document.getElementById('fReorder').value)||0,
     notes: document.getElementById('fNotes').value,
     image: prev.style.display !== 'none' ? prev.src : null,
     lastUpdated: new Date().toISOString()
   };
-
-  if (editingProductId) {
-    await set(ref(db, 'products/' + editingProductId), product);
-    showToast('✅ Product updated');
-  } else {
-    await push(ref(db, 'products'), product);
-    showToast('✅ Product added');
-  }
+  if (editingProductId) { await set(ref(db,'products/'+editingProductId), product); showToast('✅ Updated'); }
+  else { await push(ref(db,'products'), product); showToast('✅ Product added'); }
   closeOverlay('productOverlay');
 };
 
-// ---- UTILS ----
-window.closeOverlay = function(id) {
-  document.getElementById(id).classList.remove('open');
-};
-
+window.closeOverlay = function(id) { document.getElementById(id).classList.remove('open'); };
 window.showToast = function(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 };
-
 function showToast(msg) { window.showToast(msg); }
-
-// Close overlays on backdrop click
-document.querySelectorAll('.overlay').forEach(ov => {
-  ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('open'); });
-});
-
-// Make logo clickable hint for admins
-setInterval(() => {
-  document.getElementById('logoWrap').style.cursor = isAdmin ? 'pointer' : 'default';
-  if (isAdmin) document.getElementById('logoWrap').title = 'Click to upload logo';
-}, 500);
+document.querySelectorAll('.overlay').forEach(ov => ov.addEventListener('click', e => { if (e.target===ov) ov.classList.remove('open'); }));
 </script>
 </body>
 </html>
