@@ -639,12 +639,20 @@ window.deleteCategory = async function(id) {
 let reorderMode = false;
 let sortedArr = []; // last rendered sorted array, used for move operations
 
-window.toggleReorderMode = function() {
+window.toggleReorderMode = async function() {
   reorderMode = !reorderMode;
   const grid = document.getElementById('grid');
   const bar = document.getElementById('reorderBar');
   const btn = document.getElementById('reorderBtn');
   if (reorderMode) {
+    // Normalize: write clean 0,1,2,3... order values to ALL products right now
+    // so every card has a known integer before any swap happens
+    const current = Object.entries(products)
+      .map(([id,p]) => ({...p,id}))
+      .sort((a,b) => (a.order ?? 99999) - (b.order ?? 99999) || (a.name||'').localeCompare(b.name||''));
+    const updates = {};
+    current.forEach((p, i) => { updates['products/' + p.id + '/order'] = i; });
+    await update(ref(db), updates);
     grid.classList.add('reorder-mode');
     bar.classList.add('show');
     btn.textContent = '✓ Done';
@@ -658,20 +666,20 @@ window.toggleReorderMode = function() {
     btn.style.background = '';
     btn.style.color = '';
     btn.style.borderColor = '';
+    renderProducts();
   }
-  renderProducts();
 };
 
 window.moveProduct = async function(id, direction) {
   const idx = sortedArr.findIndex(p => p.id === id);
   const swapIdx = idx + direction;
   if (swapIdx < 0 || swapIdx >= sortedArr.length) return;
-  const a = sortedArr[idx], b = sortedArr[swapIdx];
-  const orderA = a.order ?? idx * 100;
-  const orderB = b.order ?? swapIdx * 100;
+  const a = sortedArr[idx];
+  const b = sortedArr[swapIdx];
+  // Both always have clean integer order values (set when entering reorder mode)
   const updates = {};
-  updates['products/' + a.id + '/order'] = orderB;
-  updates['products/' + b.id + '/order'] = orderA;
+  updates['products/' + a.id + '/order'] = b.order;
+  updates['products/' + b.id + '/order'] = a.order;
   await update(ref(db), updates);
 };
 
