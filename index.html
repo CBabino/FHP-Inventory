@@ -7,10 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --green:#1a7a4a;--green-light:#e6f4ec;--green-mid:#2d9e63;
   --red:#c0392b;--red-light:#fdecea;
   --amber:#d97706;--amber-light:#fef3c7;
+  --blue:#1d6fa4;--blue-light:#dbeafe;
   --bg:#f5f7f5;--surface:#fff;--surface2:#f0f2f0;
   --border:#dde3dd;--text:#1a1f1a;--text2:#4a544a;--text3:#8a948a;
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
@@ -22,12 +23,13 @@
   --border:#2e362e;--text:#e8ede8;--text2:#9aaa9a;--text3:#5a6a5a;
   --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.2);
   --shadow-lg:0 8px 32px rgba(0,0,0,.4);
-  --green-light:#0d2e1c;--red-light:#2e0f0f;--amber-light:#2e1f00;
+  --green-light:#0d2e1c;--red-light:#2e0f0f;--amber-light:#2e1f00;--blue-light:#0d1e2e;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .2s,color .2s;}
 
+/* TOPBAR */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 .875rem;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;}
 .topbar-left{display:flex;align-items:center;gap:.6rem;min-width:0;}
 .logo-wrap{width:34px;height:34px;border-radius:9px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--green);flex-shrink:0;cursor:default;}
@@ -47,22 +49,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .btn-admin-login{background:var(--surface2);border:1px solid var(--border);color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;padding:.3rem .65rem;border-radius:7px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .btn-admin-login:hover{background:var(--border);}
 .btn-admin-login.active{background:var(--green);color:#fff;border-color:var(--green);}
-
 .admin-bar{background:var(--green);color:#fff;padding:.3rem .875rem;font-size:.75rem;font-weight:500;display:flex;align-items:center;justify-content:space-between;}
 .admin-bar button{background:rgba(255,255,255,.2);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:.7rem;padding:.18rem .6rem;border-radius:6px;cursor:pointer;}
 .admin-bar button:hover{background:rgba(255,255,255,.3);}
 
+/* TABS */
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 .875rem;gap:0;position:sticky;top:52px;z-index:99;}
+.tab{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;padding:.7rem 1rem;border:none;background:none;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:.4rem;}
+.tab:hover{color:var(--text2);}
+.tab.active{color:var(--green);border-bottom-color:var(--green);}
+.tab-badge{background:var(--red);color:#fff;font-size:.6rem;font-weight:700;padding:.1rem .38rem;border-radius:99px;min-width:16px;text-align:center;}
+
+/* MAIN */
 .main{max-width:1280px;margin:0 auto;padding:.875rem;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.875rem;}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .75rem;}
 .stat-val{font-size:1.5rem;font-weight:600;font-family:'DM Mono',monospace;line-height:1;margin-bottom:.15rem;}
-.stat-val.blue{color:#1d6fa4;}.stat-val.green{color:var(--green);}.stat-val.red{color:var(--red);}
+.stat-val.blue{color:var(--blue);}.stat-val.green{color:var(--green);}.stat-val.red{color:var(--red);}
 .stat-label{font-size:.65rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
-
 .low-alert{background:var(--red-light);border:1px solid rgba(192,57,43,.2);border-radius:var(--radius);padding:.65rem .875rem;margin-bottom:.875rem;}
 .low-alert-title{font-weight:600;color:var(--red);font-size:.82rem;margin-bottom:.3rem;}
 .low-alert-item{font-size:.78rem;color:var(--red);opacity:.85;padding:.08rem 0;}
 
+/* TOOLBAR */
 .toolbar{display:flex;align-items:center;gap:.45rem;margin-bottom:.875rem;flex-wrap:wrap;}
 .toolbar-left{display:flex;align-items:center;gap:.45rem;flex:1;min-width:0;flex-wrap:wrap;}
 .search-wrap{position:relative;flex:1;min-width:120px;}
@@ -87,13 +100,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @media(min-width:1280px){.grid{grid-template-columns:repeat(5,1fr);}}
 
 /* CARD */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s,border-color .2s,background .2s;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s,border-color .2s;}
 .card:hover{box-shadow:var(--shadow-lg);}
 .reorder-bar{background:var(--amber-light);border:1px solid rgba(217,119,6,.3);border-radius:var(--radius-sm);padding:.45rem .75rem;margin-bottom:.875rem;display:none;align-items:center;justify-content:space-between;gap:.5rem;}
 .reorder-bar.show{display:flex;}
 .reorder-bar-text{font-size:.78rem;font-weight:600;color:var(--amber);}
 .reorder-done-btn{background:var(--green);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;padding:.32rem .8rem;border-radius:6px;cursor:pointer;white-space:nowrap;}
-.reorder-mode .card{border-color:var(--border);}
 .reorder-arrows{display:none;grid-template-columns:1fr 1fr;gap:.35rem;margin-top:.35rem;}
 .reorder-mode .reorder-arrows{display:grid;}
 .reorder-mode .qty-btns{display:none;}
@@ -110,9 +122,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .card-actions{display:flex;gap:.1rem;flex-shrink:0;}
 .icon-btn{background:none;border:none;cursor:pointer;padding:.18rem;border-radius:5px;color:var(--text3);transition:all .15s;font-size:.75rem;line-height:1;}
 .icon-btn:hover{background:var(--surface2);}
-.icon-btn.edit:hover{color:#1d6fa4;}
+.icon-btn.edit:hover{color:var(--blue);}
 .icon-btn.del:hover{color:var(--red);}
-.cat-tag{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .45rem;border-radius:99px;margin-bottom:.45rem;}
+.cat-tags{display:flex;flex-wrap:wrap;gap:.25rem;margin-bottom:.45rem;}
+.cat-tag{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .45rem;border-radius:99px;}
 .qty-area{margin-bottom:.45rem;}
 .qty-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.3rem;gap:.2rem;}
 .qty-val{font-size:1.1rem;font-weight:600;font-family:'DM Mono',monospace;color:var(--text);line-height:1;}
@@ -125,6 +138,29 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .card-notes{font-size:.68rem;color:var(--text3);border-top:1px solid var(--border);padding-top:.38rem;margin-top:.3rem;font-style:italic;line-height:1.4;}
 .card-date{font-size:.6rem;color:var(--text3);margin-top:.25rem;font-family:'DM Mono',monospace;}
 
+/* MULTI-CATEGORY CHECKBOXES */
+.cat-check-list{display:flex;flex-direction:column;gap:.4rem;max-height:160px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .65rem;background:var(--surface);}
+.cat-check-item{display:flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.88rem;color:var(--text);}
+.cat-check-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--green);cursor:pointer;flex-shrink:0;}
+.cat-check-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* REQUESTS TAB */
+.request-cta{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;margin-bottom:1rem;}
+.request-cta-title{font-size:1rem;font-weight:600;margin-bottom:.35rem;}
+.request-cta-sub{font-size:.82rem;color:var(--text3);margin-bottom:.9rem;}
+.request-list{display:flex;flex-direction:column;gap:.6rem;}
+.request-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.85rem 1rem;}
+.request-card.fulfilled{opacity:.5;}
+.request-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:.5rem;margin-bottom:.35rem;}
+.request-item-name{font-size:.9rem;font-weight:600;color:var(--text);}
+.request-meta{font-size:.75rem;color:var(--text3);margin-top:.15rem;}
+.request-status{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.15rem .5rem;border-radius:99px;white-space:nowrap;flex-shrink:0;}
+.request-status.pending{background:var(--amber-light);color:var(--amber);}
+.request-status.fulfilled{background:var(--green-light);color:var(--green);}
+.request-actions{display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap;}
+.btn-fulfill{background:var(--green-light);color:var(--green);border:none;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;padding:.3rem .7rem;border-radius:6px;cursor:pointer;}
+.btn-del-req{background:var(--red-light);color:var(--red);border:none;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;padding:.3rem .7rem;border-radius:6px;cursor:pointer;}
+.req-notes{font-size:.78rem;color:var(--text2);margin-top:.3rem;font-style:italic;}
 .empty{text-align:center;padding:3rem 1rem;}
 .empty-icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.25;}
 .empty-title{font-size:.95rem;font-weight:600;color:var(--text3);margin-bottom:.2rem;}
@@ -160,7 +196,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .range-input{flex:1;min-width:70px;accent-color:var(--green);cursor:pointer;}
 .img-preview-thumb{width:100%;max-height:110px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:.5rem;display:none;}
 .img-status{font-size:.72rem;color:var(--text3);margin-top:.35rem;font-style:italic;}
-
 .admin-modal{max-width:320px;}
 .pin-input{text-align:center;font-size:1.4rem;font-family:'DM Mono',monospace;letter-spacing:.3em;}
 .pin-error{color:var(--red);font-size:.8rem;text-align:center;margin-top:.45rem;}
@@ -170,7 +205,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .cat-color-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .cat-add-row{display:flex;gap:.45rem;}
 .cat-add-row input{flex:1;}
-
 .loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.7rem;z-index:9999;}
 .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -180,10 +214,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 </head>
 <body>
 
-<div class="loading-screen" id="loadingScreen">
-  <div class="spinner"></div>
-  <span style="font-size:.82rem;color:var(--text3)">Connecting…</span>
-</div>
+<div class="loading-screen" id="loadingScreen"><div class="spinner"></div><span style="font-size:.82rem;color:var(--text3)">Connecting…</span></div>
 
 <div class="admin-bar" id="adminBar" style="display:none">
   <span>🔐 Admin mode</span>
@@ -202,38 +233,63 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </div>
 
+<div class="tabs">
+  <button class="tab active" id="tabInventoryBtn" onclick="switchTab('inventory')">📦 Inventory</button>
+  <button class="tab" id="tabRequestsBtn" onclick="switchTab('requests')">📋 Requests <span class="tab-badge" id="requestBadge" style="display:none">0</span></button>
+</div>
+
 <div class="main">
-  <div class="stats-row">
-    <div class="stat"><div class="stat-val blue" id="statTotal">0</div><div class="stat-label">Total</div></div>
-    <div class="stat"><div class="stat-val green" id="statInStock">0</div><div class="stat-label">In Stock</div></div>
-    <div class="stat"><div class="stat-val red" id="statLow">0</div><div class="stat-label">Low Stock</div></div>
-  </div>
-  <div class="low-alert" id="lowAlert" style="display:none">
-    <div class="low-alert-title">⚠️ Low Stock Alert</div>
-    <div id="lowAlertItems"></div>
-  </div>
-  <div class="toolbar">
-    <div class="toolbar-left">
-      <div class="search-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Search…" oninput="renderProducts()">
-      </div>
-      <div class="filter-pills" id="filterPills"></div>
+
+  <!-- INVENTORY TAB -->
+  <div class="tab-panel active" id="tabInventory">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val blue" id="statTotal">0</div><div class="stat-label">Total</div></div>
+      <div class="stat"><div class="stat-val green" id="statInStock">0</div><div class="stat-label">In Stock</div></div>
+      <div class="stat"><div class="stat-val red" id="statLow">0</div><div class="stat-label">Low Stock</div></div>
     </div>
-    <button class="btn-primary" id="addProductBtn" style="display:none" onclick="openProductModal()">+ Add</button>
-    <button class="btn-secondary" id="manageCatsBtn" style="display:none" onclick="openCatManager()">⚙ Cats</button>
-    <button class="btn-secondary" id="reorderBtn" style="display:none" onclick="toggleReorderMode()">⇅ Reorder</button>
+    <div class="low-alert" id="lowAlert" style="display:none">
+      <div class="low-alert-title">⚠️ Low Stock Alert</div>
+      <div id="lowAlertItems"></div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search…" oninput="renderProducts()">
+        </div>
+        <div class="filter-pills" id="filterPills"></div>
+      </div>
+      <button class="btn-primary" id="addProductBtn" style="display:none" onclick="openProductModal()">+ Add</button>
+      <button class="btn-secondary" id="manageCatsBtn" style="display:none" onclick="openCatManager()">⚙ Cats</button>
+      <button class="btn-secondary" id="reorderBtn" style="display:none" onclick="toggleReorderMode()">⇅ Reorder</button>
+    </div>
+    <div class="reorder-bar" id="reorderBar">
+      <span class="reorder-bar-text">↑↓ Tap arrows on cards to reorder</span>
+      <button class="reorder-done-btn" onclick="toggleReorderMode()">✓ Done</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-icon">📦</div>
+      <div class="empty-title">No products found</div>
+      <div class="empty-sub" id="emptySubText">Ask an admin to add products</div>
+    </div>
   </div>
-  <div class="reorder-bar" id="reorderBar">
-    <span class="reorder-bar-text">↑↓ Tap arrows on cards to reorder</span>
-    <button class="reorder-done-btn" onclick="toggleReorderMode()">✓ Done</button>
+
+  <!-- REQUESTS TAB -->
+  <div class="tab-panel" id="tabRequests">
+    <div class="request-cta">
+      <div class="request-cta-title">Need something?</div>
+      <div class="request-cta-sub">Submit a request and the admin will be notified.</div>
+      <button class="btn-primary" style="margin:0 auto;justify-content:center" onclick="openRequestModal()">+ New Request</button>
+    </div>
+    <div class="request-list" id="requestList"></div>
+    <div class="empty" id="reqEmpty" style="display:none">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">No requests yet</div>
+      <div class="empty-sub">Tap "+ New Request" above to submit one</div>
+    </div>
   </div>
-  <div class="grid" id="grid"></div>
-  <div class="empty" id="emptyState" style="display:none">
-    <div class="empty-icon">📦</div>
-    <div class="empty-title">No products found</div>
-    <div class="empty-sub" id="emptySubText">Ask an admin to add products</div>
-  </div>
+
 </div>
 
 <!-- ADMIN LOGIN -->
@@ -264,8 +320,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <input type="text" id="fName" class="form-input" placeholder="e.g. Termite Spray">
       </div>
       <div class="form-group">
-        <label class="form-label">Category</label>
-        <select id="fCategory" class="form-select"></select>
+        <label class="form-label">Categories <span style="font-weight:400;text-transform:none;letter-spacing:0">(select one or more)</span></label>
+        <div class="cat-check-list" id="fCategoryList"></div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -292,17 +348,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <div class="form-group">
         <label class="form-label">Product Image</label>
         <input type="file" id="fImage" class="form-input" accept="image/*" onchange="handleImagePick(this)">
-        <!-- Crop/resize tool -->
         <div class="img-tool-wrap" id="imgToolWrap" style="display:none">
-          <div class="img-tool-label">✂️ Adjust &amp; crop — drag to reposition, zoom to fit</div>
-          <div class="img-canvas-wrap" id="imgCanvasWrap">
-            <canvas id="imgCanvas"></canvas>
-          </div>
+          <div class="img-tool-label">✂️ Drag to reposition · zoom to fit · tap Apply</div>
+          <div class="img-canvas-wrap" id="imgCanvasWrap"><canvas id="imgCanvas"></canvas></div>
           <div class="img-tool-controls">
             <label>Zoom</label>
             <input type="range" class="range-input" id="imgZoom" min="0.1" max="5" step="0.01" value="1" oninput="drawCrop()">
             <button type="button" class="btn-secondary" style="font-size:.72rem;padding:.28rem .55rem" onclick="resetCrop()">Reset</button>
-            <button type="button" class="btn-primary" style="font-size:.72rem;padding:.28rem .55rem" onclick="applyCrop()">✓ Use this</button>
+            <button type="button" class="btn-primary" style="font-size:.72rem;padding:.28rem .55rem" onclick="applyCrop()">✓ Apply</button>
           </div>
         </div>
         <img id="fImagePreview" class="img-preview-thumb">
@@ -331,8 +384,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <button class="btn-primary" onclick="addCategory()">Add</button>
       </div>
     </div>
+    <div class="modal-foot"><button class="btn-primary" style="flex:1;justify-content:center" onclick="closeOverlay('catOverlay')">Done</button></div>
+  </div>
+</div>
+
+<!-- REQUEST MODAL -->
+<div class="overlay" id="requestOverlay">
+  <div class="modal">
+    <div class="modal-head"><span class="modal-title">New Request</span><button class="modal-close" onclick="closeOverlay('requestOverlay')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Your Name *</label>
+        <input type="text" id="reqName" class="form-input" placeholder="e.g. John Smith">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item *</label>
+        <select id="reqItem" class="form-select" onchange="handleReqItemChange(this)"></select>
+      </div>
+      <div class="form-group" id="reqOtherGroup" style="display:none">
+        <label class="form-label">Describe what you need *</label>
+        <input type="text" id="reqOtherText" class="form-input" placeholder="Product name, size, quantity…">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes / Reason <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+        <textarea id="reqNotes" class="form-textarea" rows="2" placeholder="Any extra details…"></textarea>
+      </div>
+    </div>
     <div class="modal-foot">
-      <button class="btn-primary" style="flex:1;justify-content:center" onclick="closeOverlay('catOverlay')">Done</button>
+      <button class="btn-secondary" onclick="closeOverlay('requestOverlay')">Cancel</button>
+      <button class="btn-primary" onclick="submitRequest()">Submit Request</button>
     </div>
   </div>
 </div>
@@ -356,15 +436,15 @@ const firebaseConfig = {
 
 const ADMIN_PIN = "9728";
 const CAT_COLORS = ["#1a7a4a","#1d6fa4","#d97706","#c0392b","#7c3aed","#0891b2","#be185d","#4d7c0f"];
-const IMG_SIZE = 300; // output px — small enough for Firebase, big enough to look good
+const IMG_SIZE = 300;
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let products = {}, categories = {}, images = {};
+let products = {}, categories = {}, images = {}, requests = {};
 let isAdmin = false, editingProductId = null, activeFilter = "all";
-let toastTimer = null;
-let pendingImageDataUrl = null; // holds compressed image before save
+let toastTimer = null, reorderMode = false, sortedArr = [];
+let pendingImageDataUrl = null;
 
 // ---- DARK MODE ----
 const savedTheme = localStorage.getItem('fhp-theme') || 'light';
@@ -374,6 +454,14 @@ window.toggleDark = function() {
   document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
   document.getElementById('darkToggle').textContent = isDark ? '🌙' : '☀️';
   localStorage.setItem('fhp-theme', isDark ? 'light' : 'dark');
+};
+
+// ---- TABS ----
+window.switchTab = function(tab) {
+  document.getElementById('tabInventory').classList.toggle('active', tab === 'inventory');
+  document.getElementById('tabRequests').classList.toggle('active', tab === 'requests');
+  document.getElementById('tabInventoryBtn').classList.toggle('active', tab === 'inventory');
+  document.getElementById('tabRequestsBtn').classList.toggle('active', tab === 'requests');
 };
 
 // ---- FIREBASE ----
@@ -387,31 +475,27 @@ onValue(ref(db, 'logo'), snap => {
 });
 onValue(ref(db, 'categories'), snap => {
   categories = snap.val() || {};
-  renderFilterPills(); populateCategorySelect(); renderCatList();
+  renderFilterPills(); populateCategoryCheckboxes(); renderCatList();
 });
-// Images stored separately from products to avoid size issues
-onValue(ref(db, 'images'), snap => {
-  images = snap.val() || {};
-  renderProducts();
-});
+onValue(ref(db, 'images'), snap => { images = snap.val() || {}; renderProducts(); });
 onValue(ref(db, 'products'), snap => {
   document.getElementById('loadingScreen').style.display = 'none';
   products = snap.val() || {};
   renderProducts();
+});
+onValue(ref(db, 'requests'), snap => {
+  requests = snap.val() || {};
+  renderRequests();
 });
 
 // ---- LOGO ----
 document.getElementById('logoWrap').addEventListener('click', () => { if (isAdmin) document.getElementById('logoUploadInput').click(); });
 window.uploadLogo = function(inp) {
   const f = inp.files[0]; if (!f) return;
-  compressFile(f, 200, 200, 0.7).then(async data => {
-    await set(ref(db,'logo'), data);
-    showToast('✅ Logo updated');
-  });
+  compressFile(f, 200, 200, 0.7).then(async data => { await set(ref(db,'logo'), data); showToast('✅ Logo updated'); });
 };
 
-// ---- IMAGE COMPRESSION UTILITY ----
-// Returns a promise resolving to a compressed base64 jpeg string
+// ---- COMPRESS UTILS ----
 function compressFile(file, maxW, maxH, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -423,8 +507,7 @@ function compressFile(file, maxW, maxH, quality) {
         const scale = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
         const w = Math.max(1, Math.round(img.naturalWidth * scale));
         const h = Math.max(1, Math.round(img.naturalHeight * scale));
-        const c = document.createElement('canvas');
-        c.width = w; c.height = h;
+        const c = document.createElement('canvas'); c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
         resolve(c.toDataURL('image/jpeg', quality));
       };
@@ -433,117 +516,6 @@ function compressFile(file, maxW, maxH, quality) {
     reader.readAsDataURL(file);
   });
 }
-
-function compressDataUrl(dataUrl, maxW, maxH, quality) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onerror = reject;
-    img.onload = () => {
-      const scale = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
-      const w = Math.max(1, Math.round(img.naturalWidth * scale));
-      const h = Math.max(1, Math.round(img.naturalHeight * scale));
-      const c = document.createElement('canvas');
-      c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      resolve(c.toDataURL('image/jpeg', quality));
-    };
-    img.src = dataUrl;
-  });
-}
-
-// ---- IMAGE PICK & CROP ----
-let cropImg = null, cropOffX = 0, cropOffY = 0, cropZoom = 1;
-let dragStart = null, dragOff = null;
-
-window.handleImagePick = function(inp) {
-  const f = inp.files[0]; if (!f) return;
-  setImgStatus('Loading…');
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      cropImg = img;
-      const canvas = document.getElementById('imgCanvas');
-      const wrap = document.getElementById('imgCanvasWrap');
-      // Use square output
-      canvas.width = IMG_SIZE; canvas.height = IMG_SIZE;
-      const dispW = wrap.getBoundingClientRect().width || 280;
-      canvas.style.height = dispW + 'px';
-      const scale = Math.max(IMG_SIZE / img.naturalWidth, IMG_SIZE / img.naturalHeight);
-      cropZoom = scale;
-      document.getElementById('imgZoom').min = (scale * 0.3).toFixed(3);
-      document.getElementById('imgZoom').max = (scale * 6).toFixed(3);
-      document.getElementById('imgZoom').value = scale;
-      cropOffX = (IMG_SIZE - img.naturalWidth * scale) / 2;
-      cropOffY = (IMG_SIZE - img.naturalHeight * scale) / 2;
-      drawCrop();
-      document.getElementById('imgToolWrap').style.display = 'block';
-      document.getElementById('fImagePreview').style.display = 'none';
-      pendingImageDataUrl = null;
-      setImgStatus('Drag to reposition, zoom to fit, then tap "✓ Use this"');
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(f);
-};
-
-window.drawCrop = function() {
-  if (!cropImg) return;
-  cropZoom = parseFloat(document.getElementById('imgZoom').value);
-  const canvas = document.getElementById('imgCanvas');
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#000';
-  ctx.fillRect(0, 0, IMG_SIZE, IMG_SIZE);
-  ctx.drawImage(cropImg, cropOffX, cropOffY, cropImg.naturalWidth * cropZoom, cropImg.naturalHeight * cropZoom);
-};
-
-window.resetCrop = function() {
-  if (!cropImg) return;
-  const scale = Math.max(IMG_SIZE / cropImg.naturalWidth, IMG_SIZE / cropImg.naturalHeight);
-  cropZoom = scale;
-  document.getElementById('imgZoom').value = scale;
-  cropOffX = (IMG_SIZE - cropImg.naturalWidth * scale) / 2;
-  cropOffY = (IMG_SIZE - cropImg.naturalHeight * scale) / 2;
-  drawCrop();
-};
-
-window.applyCrop = function() {
-  if (!cropImg) return;
-  const canvas = document.getElementById('imgCanvas');
-  // Export from crop canvas — already IMG_SIZE x IMG_SIZE
-  const raw = canvas.toDataURL('image/jpeg', 0.85);
-  pendingImageDataUrl = raw;
-  const prev = document.getElementById('fImagePreview');
-  prev.src = raw; prev.style.display = 'block';
-  document.getElementById('imgToolWrap').style.display = 'none';
-  setImgStatus('✅ Image ready — will be saved when you submit');
-};
-
-function setImgStatus(msg) {
-  document.getElementById('imgStatus').textContent = msg;
-}
-
-// Drag to pan
-const canvasWrap = document.getElementById('imgCanvasWrap');
-function getPos(e) {
-  const t = e.touches ? e.touches[0] : e;
-  return { x: t.clientX, y: t.clientY };
-}
-canvasWrap.addEventListener('mousedown', e => { dragStart = getPos(e); dragOff = { x: cropOffX, y: cropOffY }; e.preventDefault(); });
-canvasWrap.addEventListener('touchstart', e => { dragStart = getPos(e); dragOff = { x: cropOffX, y: cropOffY }; }, { passive:true });
-function onMove(e) {
-  if (!dragStart) return;
-  const rect = document.getElementById('imgCanvas').getBoundingClientRect();
-  const scale = IMG_SIZE / rect.width;
-  const p = getPos(e);
-  cropOffX = dragOff.x + (p.x - dragStart.x) * scale;
-  cropOffY = dragOff.y + (p.y - dragStart.y) * scale;
-  drawCrop();
-}
-window.addEventListener('mousemove', onMove);
-window.addEventListener('touchmove', onMove, { passive:true });
-window.addEventListener('mouseup', () => { dragStart = null; });
-window.addEventListener('touchend', () => { dragStart = null; });
 
 // ---- ADMIN ----
 window.openAdminLogin = function() {
@@ -566,7 +538,7 @@ window.checkPin = function() {
     document.getElementById('logoWrap').style.cursor = 'pointer';
     document.getElementById('logoWrap').title = 'Click to change logo';
     showToast('✅ Welcome, admin!');
-    renderProducts();
+    renderProducts(); renderRequests();
   } else {
     document.getElementById('pinError').style.display = 'block';
     document.getElementById('pinInput').value = '';
@@ -580,11 +552,11 @@ window.adminLogout = function() {
   document.getElementById('addProductBtn').style.display = 'none';
   document.getElementById('manageCatsBtn').style.display = 'none';
   document.getElementById('reorderBtn').style.display = 'none';
-  if (reorderMode) { reorderMode = false; document.getElementById('grid').classList.remove('reorder-mode'); document.getElementById('reorderBar').classList.remove('show'); }
   document.getElementById('logoWrap').style.cursor = 'default';
   document.getElementById('logoWrap').removeAttribute('title');
+  if (reorderMode) { reorderMode = false; document.getElementById('grid').classList.remove('reorder-mode'); document.getElementById('reorderBar').classList.remove('show'); }
   showToast('Logged out');
-  renderProducts();
+  renderProducts(); renderRequests();
 };
 
 // ---- CATEGORIES ----
@@ -603,13 +575,22 @@ function renderFilterPills() {
   document.getElementById('filterPills').innerHTML = html;
 }
 window.setFilter = function(id) { activeFilter = id; renderFilterPills(); renderProducts(); };
-function populateCategorySelect() {
-  const sel = document.getElementById('fCategory');
-  const prev = sel.value;
-  sel.innerHTML = '<option value="">— No category —</option>';
-  Object.entries(categories).forEach(([id, cat]) => { sel.innerHTML += '<option value="' + id + '">' + cat.name + '</option>'; });
-  if (prev) sel.value = prev;
+
+function populateCategoryCheckboxes(selectedIds) {
+  const list = document.getElementById('fCategoryList');
+  const sel = selectedIds || [];
+  const ents = Object.entries(categories);
+  if (!ents.length) { list.innerHTML = '<div style="font-size:.8rem;color:var(--text3);padding:.3rem 0">No categories yet — add some via ⚙ Cats</div>'; return; }
+  list.innerHTML = ents.map(([id, cat]) => {
+    const col = getCatColor(id);
+    const checked = sel.includes(id) ? 'checked' : '';
+    return '<label class="cat-check-item"><input type="checkbox" value="' + id + '" ' + checked + '><span class="cat-check-dot" style="background:' + col + '"></span>' + cat.name + '</label>';
+  }).join('');
 }
+function getSelectedCategoryIds() {
+  return Array.from(document.querySelectorAll('#fCategoryList input[type=checkbox]:checked')).map(c => c.value);
+}
+
 function renderCatList() {
   const list = document.getElementById('catList');
   const ents = Object.entries(categories);
@@ -630,56 +611,117 @@ window.deleteCategory = async function(id) {
   if (!confirm('Delete this category?')) return;
   await remove(ref(db,'categories/'+id));
   const updates = {};
-  Object.entries(products).forEach(([pid, p]) => { if (p.categoryId === id) updates['products/'+pid+'/categoryId'] = null; });
+  Object.entries(products).forEach(([pid, p]) => {
+    if (p.categoryIds && p.categoryIds[id]) updates['products/'+pid+'/categoryIds/'+id] = null;
+  });
   if (Object.keys(updates).length) await update(ref(db), updates);
   showToast('🗑️ Category deleted');
 };
 
-// ---- REORDER MODE ----
-let reorderMode = false;
-let sortedArr = []; // last rendered sorted array, used for move operations
+// ---- IMAGE TOOL ----
+let cropImg = null, cropOffX = 0, cropOffY = 0, cropZoom = 1, dragStart = null, dragOff = null;
+window.handleImagePick = function(inp) {
+  const f = inp.files[0]; if (!f) return;
+  setImgStatus('Loading…');
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      cropImg = img;
+      const canvas = document.getElementById('imgCanvas');
+      const wrap = document.getElementById('imgCanvasWrap');
+      canvas.width = IMG_SIZE; canvas.height = IMG_SIZE;
+      canvas.style.height = (wrap.getBoundingClientRect().width || 280) + 'px';
+      const scale = Math.max(IMG_SIZE / img.naturalWidth, IMG_SIZE / img.naturalHeight);
+      cropZoom = scale;
+      document.getElementById('imgZoom').min = (scale * 0.3).toFixed(3);
+      document.getElementById('imgZoom').max = (scale * 6).toFixed(3);
+      document.getElementById('imgZoom').value = scale;
+      cropOffX = (IMG_SIZE - img.naturalWidth * scale) / 2;
+      cropOffY = (IMG_SIZE - img.naturalHeight * scale) / 2;
+      drawCrop();
+      document.getElementById('imgToolWrap').style.display = 'block';
+      document.getElementById('fImagePreview').style.display = 'none';
+      pendingImageDataUrl = null;
+      setImgStatus('Drag to reposition, zoom to fit, then tap "✓ Apply"');
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(f);
+};
+window.drawCrop = function() {
+  if (!cropImg) return;
+  cropZoom = parseFloat(document.getElementById('imgZoom').value);
+  const canvas = document.getElementById('imgCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#000'; ctx.fillRect(0,0,IMG_SIZE,IMG_SIZE);
+  ctx.drawImage(cropImg, cropOffX, cropOffY, cropImg.naturalWidth * cropZoom, cropImg.naturalHeight * cropZoom);
+};
+window.resetCrop = function() {
+  if (!cropImg) return;
+  const scale = Math.max(IMG_SIZE / cropImg.naturalWidth, IMG_SIZE / cropImg.naturalHeight);
+  cropZoom = scale; document.getElementById('imgZoom').value = scale;
+  cropOffX = (IMG_SIZE - cropImg.naturalWidth * scale) / 2;
+  cropOffY = (IMG_SIZE - cropImg.naturalHeight * scale) / 2;
+  drawCrop();
+};
+window.applyCrop = function() {
+  if (!cropImg) return;
+  pendingImageDataUrl = document.getElementById('imgCanvas').toDataURL('image/jpeg', 0.85);
+  const prev = document.getElementById('fImagePreview');
+  prev.src = pendingImageDataUrl; prev.style.display = 'block';
+  document.getElementById('imgToolWrap').style.display = 'none';
+  setImgStatus('✅ Image ready — will be saved when you submit');
+};
+function setImgStatus(msg) { document.getElementById('imgStatus').textContent = msg; }
+const canvasWrap = document.getElementById('imgCanvasWrap');
+function getPos(e) { const t = e.touches ? e.touches[0] : e; return { x: t.clientX, y: t.clientY }; }
+canvasWrap.addEventListener('mousedown', e => { dragStart = getPos(e); dragOff = {x:cropOffX,y:cropOffY}; e.preventDefault(); });
+canvasWrap.addEventListener('touchstart', e => { dragStart = getPos(e); dragOff = {x:cropOffX,y:cropOffY}; }, {passive:true});
+function onMove(e) {
+  if (!dragStart) return;
+  const rect = document.getElementById('imgCanvas').getBoundingClientRect();
+  const scale = IMG_SIZE / rect.width;
+  const p = getPos(e);
+  cropOffX = dragOff.x + (p.x - dragStart.x) * scale;
+  cropOffY = dragOff.y + (p.y - dragStart.y) * scale;
+  drawCrop();
+}
+window.addEventListener('mousemove', onMove);
+window.addEventListener('touchmove', onMove, {passive:true});
+window.addEventListener('mouseup', () => { dragStart = null; });
+window.addEventListener('touchend', () => { dragStart = null; });
 
+// ---- REORDER MODE ----
 window.toggleReorderMode = async function() {
   reorderMode = !reorderMode;
   const grid = document.getElementById('grid');
   const bar = document.getElementById('reorderBar');
   const btn = document.getElementById('reorderBtn');
   if (reorderMode) {
-    // Normalize: write clean 0,1,2,3... order values to ALL products right now
-    // so every card has a known integer before any swap happens
-    const current = Object.entries(products)
-      .map(([id,p]) => ({...p,id}))
-      .sort((a,b) => (a.order ?? 99999) - (b.order ?? 99999) || (a.name||'').localeCompare(b.name||''));
+    const current = Object.entries(products).map(([id,p]) => ({...p,id}))
+      .sort((a,b) => (a.order??99999)-(b.order??99999) || (a.name||'').localeCompare(b.name||''));
     const updates = {};
-    current.forEach((p, i) => { updates['products/' + p.id + '/order'] = i; });
+    current.forEach((p,i) => { updates['products/'+p.id+'/order'] = i; });
     await update(ref(db), updates);
     grid.classList.add('reorder-mode');
     bar.classList.add('show');
     btn.textContent = '✓ Done';
-    btn.style.background = 'var(--green)';
-    btn.style.color = '#fff';
-    btn.style.borderColor = 'var(--green)';
+    btn.style.background = 'var(--green)'; btn.style.color = '#fff'; btn.style.borderColor = 'var(--green)';
   } else {
-    grid.classList.remove('reorder-mode');
-    bar.classList.remove('show');
-    btn.textContent = '⇅ Reorder';
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.style.borderColor = '';
+    grid.classList.remove('reorder-mode'); bar.classList.remove('show');
+    btn.textContent = '⇅ Reorder'; btn.style.background = ''; btn.style.color = ''; btn.style.borderColor = '';
     renderProducts();
   }
 };
-
 window.moveProduct = async function(id, direction) {
   const idx = sortedArr.findIndex(p => p.id === id);
   const swapIdx = idx + direction;
   if (swapIdx < 0 || swapIdx >= sortedArr.length) return;
-  const a = sortedArr[idx];
-  const b = sortedArr[swapIdx];
-  // Both always have clean integer order values (set when entering reorder mode)
+  const a = sortedArr[idx], b = sortedArr[swapIdx];
   const updates = {};
-  updates['products/' + a.id + '/order'] = b.order;
-  updates['products/' + b.id + '/order'] = a.order;
+  updates['products/'+a.id+'/order'] = b.order;
+  updates['products/'+b.id+'/order'] = a.order;
   await update(ref(db), updates);
 };
 
@@ -689,10 +731,12 @@ window.renderProducts = function() {
   const empty = document.getElementById('emptyState');
   const search = document.getElementById('searchInput').value.toLowerCase();
   let arr = Object.entries(products).map(([id,p]) => ({...p,id}));
-  if (activeFilter !== 'all') arr = arr.filter(p => p.categoryId === activeFilter);
+
+  // Multi-category filter: product must have this category in its categoryIds map
+  if (activeFilter !== 'all') arr = arr.filter(p => p.categoryIds && p.categoryIds[activeFilter]);
   if (search) arr = arr.filter(p => (p.name||'').toLowerCase().includes(search) || (p.notes||'').toLowerCase().includes(search));
-  // Sort by order field, fall back to name
-  arr.sort((a,b) => (a.order??9999) - (b.order??9999) || (a.name||'').localeCompare(b.name||''));
+  arr.sort((a,b) => (a.order??99999)-(b.order??99999) || (a.name||'').localeCompare(b.name||''));
+  sortedArr = arr;
 
   const all = Object.values(products);
   document.getElementById('statTotal').textContent = all.length;
@@ -712,11 +756,7 @@ window.renderProducts = function() {
   }
   empty.style.display = 'none';
 
-  sortedArr = arr; // save for moveProduct
-
   grid.innerHTML = arr.map((p, idx) => {
-    const cat = p.categoryId && categories[p.categoryId];
-    const col = p.categoryId ? getCatColor(p.categoryId) : null;
     const isLow = p.quantity <= (p.reorderLevel||0);
     const imgSrc = images[p.id] || null;
     const imgHtml = imgSrc
@@ -725,21 +765,30 @@ window.renderProducts = function() {
     const adminActs = isAdmin
       ? '<button class="icon-btn edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="icon-btn del" onclick="deleteProduct(\'' + p.id + '\')">🗑️</button>'
       : '';
-    const catBadge = cat ? '<div class="cat-tag" style="background:' + col + '22;color:' + col + '">' + cat.name + '</div>' : '';
+    // Multi-category tags
+    let catTagsHtml = '';
+    if (p.categoryIds) {
+      const tags = Object.keys(p.categoryIds).map(cid => {
+        const cat = categories[cid];
+        if (!cat) return '';
+        const col = getCatColor(cid);
+        return '<span class="cat-tag" style="background:' + col + '22;color:' + col + '">' + cat.name + '</span>';
+      }).join('');
+      if (tags) catTagsHtml = '<div class="cat-tags">' + tags + '</div>';
+    }
     const reorderArrows = isAdmin
       ? '<div class="reorder-arrows">' +
-          '<button class="rarrow up" onclick="moveProduct(\'' + p.id + '\',-1)"' + (idx === 0 ? ' disabled' : '') + '>↑</button>' +
-          '<button class="rarrow down" onclick="moveProduct(\'' + p.id + '\',1)"' + (idx === arr.length - 1 ? ' disabled' : '') + '>↓</button>' +
+          '<button class="rarrow up" onclick="moveProduct(\'' + p.id + '\',-1)"' + (idx===0?' disabled':'') + '>↑</button>' +
+          '<button class="rarrow down" onclick="moveProduct(\'' + p.id + '\',1)"' + (idx===arr.length-1?' disabled':'') + '>↓</button>' +
         '</div>'
       : '';
     return '<div class="card" id="card-' + p.id + '">' + imgHtml +
       '<div class="card-body">' +
         '<div class="card-header"><span class="card-name">' + p.name + '</span><div class="card-actions">' + adminActs + '</div></div>' +
-        catBadge +
-        '<div class="qty-area"><div class="qty-row"><span class="qty-val">' + p.quantity + '<span class="qty-unit">' + p.unit + '</span></span>' + (isLow ? '<span class="low-badge">LOW</span>' : '') + '</div>' +
+        catTagsHtml +
+        '<div class="qty-area"><div class="qty-row"><span class="qty-val">' + p.quantity + '<span class="qty-unit">' + p.unit + '</span></span>' + (isLow?'<span class="low-badge">LOW</span>':'') + '</div>' +
         '<div class="qty-btns"><button class="qty-btn dec" onclick="adjustQty(\'' + p.id + '\',-1)">−1</button><button class="qty-btn inc" onclick="adjustQty(\'' + p.id + '\',1)">+1</button></div>' +
-        reorderArrows +
-        '</div>' +
+        reorderArrows + '</div>' +
         (p.notes ? '<div class="card-notes">' + p.notes + '</div>' : '') +
         '<div class="card-date">' + (p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : '—') + '</div>' +
       '</div></div>';
@@ -756,7 +805,6 @@ window.deleteProduct = async function(id) {
   await remove(ref(db,'images/'+id));
   showToast('🗑️ Product deleted');
 };
-
 window.openProductModal = function() {
   editingProductId = null;
   document.getElementById('productModalTitle').textContent = 'Add Product';
@@ -768,11 +816,9 @@ window.openProductModal = function() {
   document.getElementById('imgToolWrap').style.display = 'none';
   pendingImageDataUrl = null; cropImg = null;
   setImgStatus('');
-  populateCategorySelect();
-  document.getElementById('fCategory').value = '';
+  populateCategoryCheckboxes([]);
   document.getElementById('productOverlay').classList.add('open');
 };
-
 window.editProduct = function(id) {
   const p = products[id]; if (!p) return;
   editingProductId = id;
@@ -786,42 +832,36 @@ window.editProduct = function(id) {
   document.getElementById('fImage').value = '';
   document.getElementById('imgToolWrap').style.display = 'none';
   pendingImageDataUrl = null; cropImg = null;
-  populateCategorySelect();
-  document.getElementById('fCategory').value = p.categoryId||'';
+  const selectedIds = p.categoryIds ? Object.keys(p.categoryIds) : [];
+  populateCategoryCheckboxes(selectedIds);
   const prev = document.getElementById('fImagePreview');
   const existing = images[id];
   if (existing) { prev.src = existing; prev.style.display = 'block'; setImgStatus('Existing image — upload a new one to replace it'); }
   else { prev.style.display = 'none'; setImgStatus(''); }
   document.getElementById('productOverlay').classList.add('open');
 };
-
 window.submitProduct = async function() {
   const name = document.getElementById('fName').value.trim();
   const qty = parseFloat(document.getElementById('fQty').value);
   if (!name || isNaN(qty)) { alert('Please enter a name and quantity.'); return; }
-
-  // Auto-apply crop if tool is still open
-  if (document.getElementById('imgToolWrap').style.display !== 'none' && cropImg) {
-    const canvas = document.getElementById('imgCanvas');
-    pendingImageDataUrl = canvas.toDataURL('image/jpeg', 0.82);
-    document.getElementById('imgToolWrap').style.display = 'none';
-  }
+  if (document.getElementById('imgToolWrap').style.display !== 'none') { showToast('⚠️ Tap "✓ Apply" to apply the image first'); return; }
 
   const btn = document.getElementById('productSubmitBtn');
   btn.textContent = 'Saving…'; btn.disabled = true;
 
   try {
+    // Build categoryIds map from checkboxes: { catId: true, ... }
+    const selectedIds = getSelectedCategoryIds();
+    const categoryIds = selectedIds.length ? Object.fromEntries(selectedIds.map(id => [id, true])) : null;
+
     const product = {
-      name,
-      categoryId: document.getElementById('fCategory').value||null,
-      quantity: qty,
-      unit: document.getElementById('fUnit').value,
+      name, categoryIds,
+      quantity: qty, unit: document.getElementById('fUnit').value,
       reorderLevel: parseFloat(document.getElementById('fReorder').value)||0,
       notes: document.getElementById('fNotes').value,
       lastUpdated: new Date().toISOString(),
       order: editingProductId ? (products[editingProductId]?.order ?? Date.now()) : Date.now()
     };
-
     let productId = editingProductId;
     if (editingProductId) {
       await set(ref(db,'products/'+editingProductId), product);
@@ -829,25 +869,112 @@ window.submitProduct = async function() {
       const newRef = await push(ref(db,'products'), product);
       productId = newRef.key;
     }
-
-    // Save image separately under /images/{productId}
-    if (pendingImageDataUrl) {
-      await set(ref(db,'images/'+productId), pendingImageDataUrl);
-      showToast('✅ ' + (editingProductId ? 'Updated' : 'Product added'));
-    } else if (!editingProductId) {
-      // No image for new product — that's fine
-      showToast('✅ Product added');
-    } else {
-      showToast('✅ Updated');
-    }
-
+    if (pendingImageDataUrl) await set(ref(db,'images/'+productId), pendingImageDataUrl);
+    showToast(editingProductId ? '✅ Updated' : '✅ Product added');
     closeOverlay('productOverlay');
   } catch(err) {
-    console.error('Save error:', err);
+    console.error(err);
     showToast('❌ Save failed: ' + (err.message || 'unknown error'));
   }
   btn.disabled = false;
   btn.textContent = editingProductId ? 'Save Changes' : 'Add Product';
+};
+
+// ---- REQUESTS ----
+function populateRequestItemSelect() {
+  const sel = document.getElementById('reqItem');
+  sel.innerHTML = '';
+  const sorted = Object.values(products).sort((a,b) => (a.name||'').localeCompare(b.name||''));
+  sorted.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.name; opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+  const other = document.createElement('option');
+  other.value = '__other__'; other.textContent = '— Other (type below) —';
+  sel.appendChild(other);
+}
+window.handleReqItemChange = function(sel) {
+  document.getElementById('reqOtherGroup').style.display = sel.value === '__other__' ? 'block' : 'none';
+};
+window.openRequestModal = function() {
+  document.getElementById('reqName').value = '';
+  document.getElementById('reqNotes').value = '';
+  document.getElementById('reqOtherText').value = '';
+  document.getElementById('reqOtherGroup').style.display = 'none';
+  populateRequestItemSelect();
+  document.getElementById('requestOverlay').classList.add('open');
+};
+window.submitRequest = async function() {
+  const name = document.getElementById('reqName').value.trim();
+  const itemSel = document.getElementById('reqItem').value;
+  const isOther = itemSel === '__other__';
+  const otherText = document.getElementById('reqOtherText').value.trim();
+  if (!name) { alert('Please enter your name.'); return; }
+  if (isOther && !otherText) { alert('Please describe what you need.'); return; }
+  const itemName = isOther ? otherText : itemSel;
+  const request = {
+    techName: name,
+    itemName,
+    isOther,
+    notes: document.getElementById('reqNotes').value,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+  await push(ref(db,'requests'), request);
+  showToast('✅ Request submitted!');
+  closeOverlay('requestOverlay');
+};
+
+window.renderRequests = function() {
+  const list = document.getElementById('requestList');
+  const empty = document.getElementById('reqEmpty');
+  const badge = document.getElementById('requestBadge');
+  const arr = Object.entries(requests).map(([id,r]) => ({...r,id}))
+    .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Badge: count pending requests (visible to admin only when on inventory tab)
+  const pendingCount = arr.filter(r => r.status === 'pending').length;
+  if (pendingCount > 0) {
+    badge.textContent = pendingCount; badge.style.display = 'inline-block';
+  } else { badge.style.display = 'none'; }
+
+  // Employees see only pending; admin sees all
+  const visible = isAdmin ? arr : arr.filter(r => r.status === 'pending');
+
+  if (!visible.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  list.innerHTML = visible.map(r => {
+    const date = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+    const isFulfilled = r.status === 'fulfilled';
+    const statusBadge = '<span class="request-status ' + (isFulfilled?'fulfilled':'pending') + '">' + (isFulfilled?'✓ Fulfilled':'Pending') + '</span>';
+    const adminActions = isAdmin
+      ? '<div class="request-actions">' +
+          (!isFulfilled ? '<button class="btn-fulfill" onclick="fulfillRequest(\'' + r.id + '\')">✓ Mark Fulfilled</button>' : '') +
+          '<button class="btn-del-req" onclick="deleteRequest(\'' + r.id + '\')">🗑️ Delete</button>' +
+        '</div>'
+      : '';
+    return '<div class="request-card' + (isFulfilled?' fulfilled':'') + '">' +
+      '<div class="request-card-header">' +
+        '<div><div class="request-item-name">' + r.itemName + '</div>' +
+        '<div class="request-meta">By <strong>' + r.techName + '</strong> · ' + date + (r.isOther ? ' · <em>Custom item</em>' : '') + '</div></div>' +
+        statusBadge +
+      '</div>' +
+      (r.notes ? '<div class="req-notes">"' + r.notes + '"</div>' : '') +
+      adminActions +
+    '</div>';
+  }).join('');
+};
+
+window.fulfillRequest = async function(id) {
+  await update(ref(db,'requests/'+id), { status: 'fulfilled' });
+  showToast('✅ Marked as fulfilled');
+};
+window.deleteRequest = async function(id) {
+  if (!confirm('Delete this request?')) return;
+  await remove(ref(db,'requests/'+id));
+  showToast('🗑️ Request deleted');
 };
 
 window.closeOverlay = function(id) { document.getElementById(id).classList.remove('open'); };
