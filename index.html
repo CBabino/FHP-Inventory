@@ -502,7 +502,24 @@ window.deleteCategory = async function(id) {
 let cropImg = null, cropOffX = 0, cropOffY = 0, cropZoom = 1;
 let dragStart = null, dragOff = null;
 let croppedDataUrl = null;
-const OUTPUT_W = 480, OUTPUT_H = 480; // square output
+const OUTPUT_W = 320, OUTPUT_H = 320; // square, kept small for Firebase
+
+// Compress any dataUrl to a max size
+function compressDataUrl(dataUrl, maxW, maxH, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(c.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  });
+}
 
 window.loadImageForCrop = function(inp) {
   const f = inp.files[0]; if (!f) return;
@@ -549,13 +566,15 @@ window.resetCrop = function() {
   cropOffY = (OUTPUT_H - cropImg.height * scale) / 2;
   drawCrop();
 };
-window.applyCrop = function() {
+window.applyCrop = async function() {
   const canvas = document.getElementById('imgCanvas');
-  croppedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+  // First export from crop canvas, then compress down
+  const raw = canvas.toDataURL('image/jpeg', 0.9);
+  croppedDataUrl = await compressDataUrl(raw, 320, 320, 0.6);
   const prev = document.getElementById('fImagePreview');
   prev.src = croppedDataUrl; prev.style.display = 'block';
   document.getElementById('imgToolWrap').style.display = 'none';
-  showToast('✅ Image applied');
+  showToast('✅ Image ready');
 };
 
 // Drag to pan
@@ -676,18 +695,37 @@ window.submitProduct = async function() {
   const name = document.getElementById('fName').value.trim();
   const qty = parseFloat(document.getElementById('fQty').value);
   if (!name || isNaN(qty)) { alert('Please enter a name and quantity.'); return; }
+
+  const submitBtn = document.getElementById('productSubmitBtn');
+  submitBtn.textContent = 'Saving…';
+  submitBtn.disabled = true;
+
   const prev = document.getElementById('fImagePreview');
+  let imageData = null;
+  if (prev.style.display !== 'none' && prev.src) {
+    // Compress before saving to Firebase — keeps under size limits
+    imageData = await compressDataUrl(prev.src, 320, 320, 0.55);
+  }
+
   const product = {
     name, categoryId: document.getElementById('fCategory').value||null,
     quantity: qty, unit: document.getElementById('fUnit').value,
     reorderLevel: parseFloat(document.getElementById('fReorder').value)||0,
     notes: document.getElementById('fNotes').value,
-    image: prev.style.display !== 'none' ? prev.src : null,
+    image: imageData,
     lastUpdated: new Date().toISOString()
   };
-  if (editingProductId) { await set(ref(db,'products/'+editingProductId), product); showToast('✅ Updated'); }
-  else { await push(ref(db,'products'), product); showToast('✅ Product added'); }
-  closeOverlay('productOverlay');
+
+  try {
+    if (editingProductId) { await set(ref(db,'products/'+editingProductId), product); showToast('✅ Updated'); }
+    else { await push(ref(db,'products'), product); showToast('✅ Product added'); }
+    closeOverlay('productOverlay');
+  } catch(err) {
+    showToast('❌ Save failed — image may be too large');
+    console.error(err);
+  }
+  submitBtn.disabled = false;
+  submitBtn.textContent = editingProductId ? 'Save Changes' : 'Add Product';
 };
 
 window.closeOverlay = function(id) { document.getElementById(id).classList.remove('open'); };
