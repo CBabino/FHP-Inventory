@@ -87,10 +87,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 @media(min-width:1280px){.grid{grid-template-columns:repeat(5,1fr);}}
 
 /* CARD */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s,opacity .2s;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow .2s,border-color .2s,background .2s;}
 .card:hover{box-shadow:var(--shadow-lg);}
-.card.dragging{opacity:.4;box-shadow:var(--shadow-lg);cursor:grabbing;}
-.card.drag-over{border-color:var(--green);border-style:dashed;}
+.reorder-bar{background:var(--amber-light);border:1px solid rgba(217,119,6,.3);border-radius:var(--radius-sm);padding:.45rem .75rem;margin-bottom:.875rem;display:none;align-items:center;justify-content:space-between;gap:.5rem;}
+.reorder-bar.show{display:flex;}
+.reorder-bar-text{font-size:.78rem;font-weight:600;color:var(--amber);}
+.reorder-done-btn{background:var(--green);color:#fff;border:none;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;padding:.32rem .8rem;border-radius:6px;cursor:pointer;white-space:nowrap;}
+.reorder-mode .card{border-color:var(--border);}
+.reorder-arrows{display:none;grid-template-columns:1fr 1fr;gap:.35rem;margin-top:.35rem;}
+.reorder-mode .reorder-arrows{display:grid;}
+.reorder-mode .qty-btns{display:none;}
+.rarrow{border:none;border-radius:var(--radius-sm);font-size:1.1rem;padding:.35rem;cursor:pointer;transition:background .15s;-webkit-tap-highlight-color:transparent;font-weight:700;width:100%;}
+.rarrow.up{background:var(--green-light);color:var(--green);}
+.rarrow.down{background:var(--surface2);color:var(--text2);}
+.rarrow:disabled{opacity:.2;cursor:default;}
 .card-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
 .card-img-placeholder{width:100%;aspect-ratio:1/1;background:var(--surface2);display:flex;align-items:center;justify-content:center;}
 .card-img-placeholder svg{width:24px;height:24px;color:var(--border);}
@@ -102,8 +112,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .icon-btn:hover{background:var(--surface2);}
 .icon-btn.edit:hover{color:#1d6fa4;}
 .icon-btn.del:hover{color:var(--red);}
-.drag-handle{cursor:grab;touch-action:none;}
-.drag-handle:active{cursor:grabbing;}
 .cat-tag{display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:.12rem .45rem;border-radius:99px;margin-bottom:.45rem;}
 .qty-area{margin-bottom:.45rem;}
 .qty-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.3rem;gap:.2rem;}
@@ -214,6 +222,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
     <button class="btn-primary" id="addProductBtn" style="display:none" onclick="openProductModal()">+ Add</button>
     <button class="btn-secondary" id="manageCatsBtn" style="display:none" onclick="openCatManager()">⚙ Cats</button>
+    <button class="btn-secondary" id="reorderBtn" style="display:none" onclick="toggleReorderMode()">⇅ Reorder</button>
+  </div>
+  <div class="reorder-bar" id="reorderBar">
+    <span class="reorder-bar-text">↑↓ Tap arrows on cards to reorder</span>
+    <button class="reorder-done-btn" onclick="toggleReorderMode()">✓ Done</button>
   </div>
   <div class="grid" id="grid"></div>
   <div class="empty" id="emptyState" style="display:none">
@@ -549,6 +562,7 @@ window.checkPin = function() {
     document.getElementById('adminLoginBtn').classList.add('active');
     document.getElementById('addProductBtn').style.display = 'flex';
     document.getElementById('manageCatsBtn').style.display = 'flex';
+    document.getElementById('reorderBtn').style.display = 'flex';
     document.getElementById('logoWrap').style.cursor = 'pointer';
     document.getElementById('logoWrap').title = 'Click to change logo';
     showToast('✅ Welcome, admin!');
@@ -565,6 +579,8 @@ window.adminLogout = function() {
   document.getElementById('adminLoginBtn').classList.remove('active');
   document.getElementById('addProductBtn').style.display = 'none';
   document.getElementById('manageCatsBtn').style.display = 'none';
+  document.getElementById('reorderBtn').style.display = 'none';
+  if (reorderMode) { reorderMode = false; document.getElementById('grid').classList.remove('reorder-mode'); document.getElementById('reorderBar').classList.remove('show'); }
   document.getElementById('logoWrap').style.cursor = 'default';
   document.getElementById('logoWrap').removeAttribute('title');
   showToast('Logged out');
@@ -619,33 +635,45 @@ window.deleteCategory = async function(id) {
   showToast('🗑️ Category deleted');
 };
 
-// ---- DRAG TO REORDER ----
-let dragSrcId = null;
+// ---- REORDER MODE ----
+let reorderMode = false;
+let sortedArr = []; // last rendered sorted array, used for move operations
 
-function addDragListeners(el, id) {
-  // Desktop
-  el.addEventListener('dragstart', e => {
-    dragSrcId = id;
-    el.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-  });
-  el.addEventListener('dragend', () => { el.classList.remove('dragging'); document.querySelectorAll('.card').forEach(c => c.classList.remove('drag-over')); });
-  el.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (dragSrcId !== id) el.classList.add('drag-over'); });
-  el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
-  el.addEventListener('drop', e => {
-    e.preventDefault();
-    el.classList.remove('drag-over');
-    if (dragSrcId && dragSrcId !== id) swapOrder(dragSrcId, id);
-  });
-}
+window.toggleReorderMode = function() {
+  reorderMode = !reorderMode;
+  const grid = document.getElementById('grid');
+  const bar = document.getElementById('reorderBar');
+  const btn = document.getElementById('reorderBtn');
+  if (reorderMode) {
+    grid.classList.add('reorder-mode');
+    bar.classList.add('show');
+    btn.textContent = '✓ Done';
+    btn.style.background = 'var(--green)';
+    btn.style.color = '#fff';
+    btn.style.borderColor = 'var(--green)';
+  } else {
+    grid.classList.remove('reorder-mode');
+    bar.classList.remove('show');
+    btn.textContent = '⇅ Reorder';
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.borderColor = '';
+  }
+  renderProducts();
+};
 
-async function swapOrder(idA, idB) {
-  const a = products[idA], b = products[idB];
-  if (!a || !b) return;
-  const orderA = a.order ?? 0, orderB = b.order ?? 0;
-  await update(ref(db,'products/'+idA), { order: orderB });
-  await update(ref(db,'products/'+idB), { order: orderA });
-}
+window.moveProduct = async function(id, direction) {
+  const idx = sortedArr.findIndex(p => p.id === id);
+  const swapIdx = idx + direction;
+  if (swapIdx < 0 || swapIdx >= sortedArr.length) return;
+  const a = sortedArr[idx], b = sortedArr[swapIdx];
+  const orderA = a.order ?? idx * 100;
+  const orderB = b.order ?? swapIdx * 100;
+  const updates = {};
+  updates['products/' + a.id + '/order'] = orderB;
+  updates['products/' + b.id + '/order'] = orderA;
+  await update(ref(db), updates);
+};
 
 // ---- RENDER PRODUCTS ----
 window.renderProducts = function() {
@@ -676,38 +704,38 @@ window.renderProducts = function() {
   }
   empty.style.display = 'none';
 
-  grid.innerHTML = arr.map(p => {
+  sortedArr = arr; // save for moveProduct
+
+  grid.innerHTML = arr.map((p, idx) => {
     const cat = p.categoryId && categories[p.categoryId];
     const col = p.categoryId ? getCatColor(p.categoryId) : null;
     const isLow = p.quantity <= (p.reorderLevel||0);
-    // Images stored under /images/{productId}
     const imgSrc = images[p.id] || null;
     const imgHtml = imgSrc
       ? '<img class="card-img" src="' + imgSrc + '" alt="' + p.name + '">'
       : '<div class="card-img-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
-    const dragHandle = isAdmin ? '<span class="icon-btn drag-handle" title="Drag to reorder">⠿</span>' : '';
     const adminActs = isAdmin
-      ? dragHandle + '<button class="icon-btn edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="icon-btn del" onclick="deleteProduct(\'' + p.id + '\')">🗑️</button>'
+      ? '<button class="icon-btn edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="icon-btn del" onclick="deleteProduct(\'' + p.id + '\')">🗑️</button>'
       : '';
     const catBadge = cat ? '<div class="cat-tag" style="background:' + col + '22;color:' + col + '">' + cat.name + '</div>' : '';
-    return '<div class="card" id="card-' + p.id + '" draggable="' + (isAdmin ? 'true' : 'false') + '">' + imgHtml +
+    const reorderArrows = isAdmin
+      ? '<div class="reorder-arrows">' +
+          '<button class="rarrow up" onclick="moveProduct(\'' + p.id + '\',-1)"' + (idx === 0 ? ' disabled' : '') + '>↑</button>' +
+          '<button class="rarrow down" onclick="moveProduct(\'' + p.id + '\',1)"' + (idx === arr.length - 1 ? ' disabled' : '') + '>↓</button>' +
+        '</div>'
+      : '';
+    return '<div class="card" id="card-' + p.id + '">' + imgHtml +
       '<div class="card-body">' +
         '<div class="card-header"><span class="card-name">' + p.name + '</span><div class="card-actions">' + adminActs + '</div></div>' +
         catBadge +
         '<div class="qty-area"><div class="qty-row"><span class="qty-val">' + p.quantity + '<span class="qty-unit">' + p.unit + '</span></span>' + (isLow ? '<span class="low-badge">LOW</span>' : '') + '</div>' +
-        '<div class="qty-btns"><button class="qty-btn dec" onclick="adjustQty(\'' + p.id + '\',-1)">−1</button><button class="qty-btn inc" onclick="adjustQty(\'' + p.id + '\',1)">+1</button></div></div>' +
+        '<div class="qty-btns"><button class="qty-btn dec" onclick="adjustQty(\'' + p.id + '\',-1)">−1</button><button class="qty-btn inc" onclick="adjustQty(\'' + p.id + '\',1)">+1</button></div>' +
+        reorderArrows +
+        '</div>' +
         (p.notes ? '<div class="card-notes">' + p.notes + '</div>' : '') +
         '<div class="card-date">' + (p.lastUpdated ? new Date(p.lastUpdated).toLocaleDateString() : '—') + '</div>' +
       '</div></div>';
   }).join('');
-
-  // Attach drag listeners to each card (admin only)
-  if (isAdmin) {
-    arr.forEach(p => {
-      const el = document.getElementById('card-' + p.id);
-      if (el) addDragListeners(el, p.id);
-    });
-  }
 };
 
 window.adjustQty = async function(id, delta) {
@@ -764,10 +792,11 @@ window.submitProduct = async function() {
   const qty = parseFloat(document.getElementById('fQty').value);
   if (!name || isNaN(qty)) { alert('Please enter a name and quantity.'); return; }
 
-  // Block if image tool is open but not applied
-  if (document.getElementById('imgToolWrap').style.display !== 'none') {
-    showToast('⚠️ Tap "✓ Use this" to apply the image first');
-    return;
+  // Auto-apply crop if tool is still open
+  if (document.getElementById('imgToolWrap').style.display !== 'none' && cropImg) {
+    const canvas = document.getElementById('imgCanvas');
+    pendingImageDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+    document.getElementById('imgToolWrap').style.display = 'none';
   }
 
   const btn = document.getElementById('productSubmitBtn');
